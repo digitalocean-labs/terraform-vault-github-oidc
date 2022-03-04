@@ -1,0 +1,13 @@
+---
+version: 2
+updates:
+  - package-ecosystem: terraform
+    directory: '/'
+    schedule:
+      interval: weekly
+      time: '00:00'
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
