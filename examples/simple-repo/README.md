@@ -1,6 +1,6 @@
 # Simple Repo Example
 
-Configuration in this directory binds one GitHub repository to Vault with GitHub OIDC.
+Example configuration in this directory binds multiple Vault roles to one GitHub repository with GitHub OIDC.
 
 # Usage
 
@@ -14,7 +14,9 @@ Configuration in this directory binds one GitHub repository to Vault with GitHub
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.3.1 |
 
 ## Modules
 
@@ -24,7 +26,9 @@ No providers.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [vault_auth_backend.generated-backend](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/data-sources/auth_backend) | data source |
 
 ## Inputs
 
@@ -34,5 +38,9 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_auth-backend-accessor"></a> [auth-backend-accessor](#output\_auth-backend-accessor) | The generated accessor ID for the auth backend. Outputting as demonstration of using a data source with the module. |
+| <a name="output_backend"></a> [backend](#output\_backend) | Exposing the auth backend path as an example. |
+| <a name="output_roles"></a> [roles](#output\_roles) | The list of Vault role names created by the module. This is a reflection of the `vault_role_name` value of each input item in `oidc-bindings`. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

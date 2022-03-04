@@ -1,8 +1,9 @@
 // Vault token should be provided in VAULT_TOKEN env var
 provider "vault" {
   address            = var.vault-address
-  skip_tls_verify    = true //
   add_address_to_env = true
+  // Used this example with a self-signed cert Vault, hence skip_tls_verify
+  skip_tls_verify = true
 }
 
 module "github-oidc" {
@@ -26,4 +27,8 @@ module "github-oidc" {
       ],
     }
   ]
+}
+
+data "vault_auth_backend" "generated-backend" {
+  path = module.github-oidc.auth-backend-path
 }
