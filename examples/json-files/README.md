@@ -1,7 +1,8 @@
-# Enterprise Example
+# JSON Files Example
 
 This example demonstrates a realistic method of allowing development teams in an enterprise setting to self-manage their
-own repo bindings to Vault while allowing for security control (via CODEOWNERS or other PR approval) of changes, if necessary.
+own repo bindings to Vault through modifying JSON files while allowing for security control (via CODEOWNERS or other PR approval)
+of changes, if necessary.
 
 # Usage
 
@@ -38,6 +39,7 @@ Dev teams create their own JSON files representing repos they own and wish to bi
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_vault-address"></a> [vault-address](#input\_vault-address) | The origin URL of the Vault server. This is a URL with a scheme, a hostname, and a port but with no path. | `string` | n/a | yes |
+| <a name="input_bindings-json-pattern"></a> [bindings-json-pattern](#input\_bindings-json-pattern) | A pattern designating a collection of JSON files to parse for OIDC binding definitions. For pattern format, see [`fileset`](https://www.terraform.io/language/functions/fileset). | `string` | `"bindings/*.json"` | no |
 
 ## Outputs
 

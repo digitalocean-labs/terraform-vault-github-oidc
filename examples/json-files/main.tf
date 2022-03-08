@@ -9,7 +9,7 @@ provider "vault" {
 locals {
   // These two local variables allow us to read a dynamic number of JSON files from the bindings/ directory
   // and load in all JSON resources in the "oidc-bindings" module variable format.
-  oidc-binding-files = fileset(path.module, "bindings/*.json")
+  oidc-binding-files = fileset(path.module, var.bindings-json-pattern)
   oidc-bindings      = flatten([for filepath in local.oidc-binding-files : jsondecode(file("${path.module}/${filepath}"))])
 }
 
