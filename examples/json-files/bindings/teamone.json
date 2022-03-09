@@ -1,6 +1,6 @@
 [
   {
-    "audience" : "artis3n-test",
+    "audience" : "https://github.com/artis3n",
     "vault_role_name" : "oidc-test",
     "bound_subject" : "repo:artis3n/github-oidc-vault-example:environment:nonprod",
     "vault_policies" : [
@@ -8,7 +8,7 @@
     ]
   },
   {
-    "audience" : "artis3n-prod-test",
+    "audience" : "https://github.com/artis3n",
     "vault_role_name" : "oidc-prod-test",
     "bound_subject" : "repo:artis3n/github-oidc-vault-example:ref:refs/heads/main",
     "vault_policies" : [

@@ -10,20 +10,32 @@ init:
 	terraform init
 	cd examples/simple-repo && terraform init
 	cd examples/json-files && terraform init
+	cd examples/additional-claims && terraform init
 
 .PHONY: validate
 validate:
 	terraform validate
 	cd examples/simple-repo && terraform validate
 	cd examples/json-files && terraform validate
+	cd examples/additional-claims && terraform validate
 
 .PHONY: plan
-plan:
-	cd examples/simple-repo && terraform plan
-	cd examples/json-files && terraform plan
+plan: plan-simple
 
 .PHONY: apply
 apply: apply-simple
+
+.PHONY: plan-simple
+plan-simple:
+	cd examples/simple-repo && terraform plan
+
+.PHONY: plan-json
+plan-json:
+	cd examples/json-files && terraform plan
+
+.PHONY: plan-claims
+plan-claims:
+	cd examples/additional-claims && terraform plan
 
 .PHONY: apply-simple
 apply-simple:
@@ -32,3 +44,7 @@ apply-simple:
 .PHONY: apply-json
 apple-json:
 	cd examples/json-files && terraform apply
+
+.PHONY: apply-claims
+apply-claims:
+	cd examples/additional-claims && terraform apply

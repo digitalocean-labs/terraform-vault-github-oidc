@@ -25,6 +25,11 @@ module "github_oidc" {
       vault_policies : [
         "oidc-policy"
       ],
+      additional_claims : {
+        # Both technically redundant with the subject claim as-is but used to demonstrate this parameter
+        job_workflow_ref = "artis3n/github-oidc-vault-example/.github/workflows/vault.yml@refs/heads/main"
+        ref              = "refs/heads/main"
+      }
     }
   ]
 }

@@ -1,6 +1,7 @@
-# Simple Repo Example
+# Additional Claims Example
 
-Example configuration in this directory binds multiple Vault roles to one GitHub repository with GitHub OIDC.
+This example demonstrates how to add additional [`bound_claims`](https://www.vaultproject.io/api/auth/jwt#bound_claims)
+to an `oidc-binding` via this module.
 
 # Usage
 
