@@ -17,27 +17,7 @@ The module requires you to configure what repositories to bind to Vault roles an
 conditions the respective repository should be granted access.
 This is encapsulated by the `oidc_bindings` variable.
 
-You can find several examples leveraging this module under `examples`:
-- [Basic usage](/examples/simple-repo)
-- [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
-- [Adding custom additional claims per OIDC binding](/examples/additional-claims)
-
 ## Variables
-
-### default_ttl
-
-The default incremental time-to-live for generated tokens, in seconds.
-Since most uses of the `hashicorp/vault-action` authenticate + retrieve secrets in one action, the default for this
-variable is set to 60 seconds.
-If you wish to customize the TTL for all roles, modify this variable.
-You can also specify individual TTL requirements on individual role bindings.
-See [`oidc_bindings.ttl`](#ttl).
-
-### oidc_auth_backend_path
-
-By default, this role will generate a JWT auth backend on Vault at the path `/github-actions`.
-If you wish to customize the path created by this module, modify this variable.
-Do **not** include a leading `/` in the variable content.
 
 ### oidc_bindings
 
@@ -137,7 +117,7 @@ oidc_bindings = [
         job_workflow_ref: 'digitalocean/oidc-example/.github/workflows/deployment.yml@v1',
       }
     ],
-  }
+  },
 ]
 ```
 
@@ -146,7 +126,31 @@ oidc_bindings = [
 You can also specify a custom `ttl` per role binding if you wish to customize beyond the `default_ttl`.
 This must be a number of seconds.
 
+### default_ttl
+
+**Optional**
+
+The default incremental time-to-live for generated tokens, in seconds.
+Since most uses of [`hashicorp/vault-action`](https://github.com/hashicorp/vault-action) authenticate + retrieve secrets
+in one step during a CI pipeline, the default for this variable is set to 60 seconds.
+If you wish to customize the TTL for all roles, modify this variable.
+You can also specify individual TTL requirements on individual role bindings.
+See [`oidc_bindings.ttl`](#ttl).
+
+### oidc_auth_backend_path
+
+**Optional**
+
+By default, this role will generate a JWT auth backend on Vault at the path `/github-actions`.
+If you wish to customize the path created by this module, modify this variable.
+Do **not** include a leading `/` in the variable content.
+
 ## Examples
+
+You can find several examples leveraging this module under `examples`:
+- [Basic usage](/examples/simple-repo)
+- [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
+- [Adding custom additional claims per OIDC binding](/examples/additional-claims)
 
 Basic example - one repo, separating secrets access by nonprod and prod pipelines:
 
