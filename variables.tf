@@ -7,7 +7,7 @@ variable "oidc_auth_backend_path" {
 variable "default_ttl" {
   type        = number
   description = "The default incremental time-to-live for generated tokens, in seconds."
-  default     = 600 # 10 minutes
+  default     = 60 # 1 minutes
 }
 
 variable "default_user_claim" {
@@ -30,7 +30,7 @@ variable "oidc_bindings" {
   description = <<-EOT
     A list of OIDC JWT bindings between GitHub repos and Vault roles. For each entry, you must include:
 
-      `audience`: By default, this is the URL of the repository owner (e.g. `https://github.com/digitalocean`). This can be customized with the `jwtGithubAudience` parameter in [hashicorp/vault-action](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token) . This is the bound audience (`aud`) field from [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) .
+      `audience`: By default, this must be the URL of the repository owner (e.g. `https://github.com/digitalocean`). This can be customized with the `jwtGithubAudience` parameter in [hashicorp/vault-action](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token) . This is the bound audience (`aud`) field from [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) .
 
       `vault_role_name`: The name of the Vault role to generate under the OIDC auth backend.
 

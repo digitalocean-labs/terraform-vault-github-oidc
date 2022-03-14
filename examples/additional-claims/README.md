@@ -29,6 +29,7 @@ to an `oidc-binding` via this module.
 
 | Name | Type |
 |------|------|
+| [vault_policy.example](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/resources/policy) | resource |
 | [vault_auth_backend.generated_backend](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/data-sources/auth_backend) | data source |
 
 ## Inputs

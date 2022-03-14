@@ -5,6 +5,6 @@ variable "vault_address" {
 
 variable "bindings_json_pattern" {
   type        = string
-  description = "A pattern designating a collection of JSON files to parse for OIDC binding definitions. For pattern format, see [`fileset`](https://www.terraform.io/language/functions/fileset)."
+  description = "A pattern designating a collection of JSON files to parse for OIDC binding definitions. For pattern format, see [`fileset`](https://www.terraform.io/language/functions/fileset) ."
   default     = "bindings/*.json"
 }

@@ -3,6 +3,7 @@ provider "vault" {
   address            = var.vault_address
   add_address_to_env = true
   // Used this example with a self-signed cert Vault, hence skip_tls_verify
+  // Don't do this outside of debugging and testing
   skip_tls_verify = true
 }
 
@@ -15,7 +16,7 @@ module "github_oidc" {
       vault_role_name : "oidc-test",
       bound_subject : "repo:artis3n/github-oidc-vault-example:environment:nonprod",
       vault_policies : [
-        "oidc-policy"
+        vault_policy.example.name,
       ],
     },
     {
@@ -23,10 +24,19 @@ module "github_oidc" {
       vault_role_name : "oidc-prod-test",
       bound_subject : "repo:artis3n/github-oidc-vault-example:ref:refs/heads/main",
       vault_policies : [
-        "oidc-policy"
+        vault_policy.example.name,
       ],
-    }
+    },
   ]
+}
+
+resource "vault_policy" "example" {
+  name   = "oidc-example"
+  policy = <<-EOT
+    path "secret/data/foo/bar" {
+      capabilities = ["list", "read"]
+    }
+  EOT
 }
 
 data "vault_auth_backend" "generated_backend" {

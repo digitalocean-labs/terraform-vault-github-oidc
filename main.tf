@@ -30,7 +30,8 @@ resource "vault_jwt_auth_backend_role" "github_oidc_role" {
   # So, either declare both to be the same value or just use bound_claims.sub.
   # We're doing the latter.
   bound_subject = ""
-  # Add any additional claims a user has entered. Ensure the bound_subject parameter overwrites any other sub declarations.
+  # Add any additional claims a user has entered.
+  # Ensure the bound_subject parameter overwrites any other sub declarations (second map in merge overwrites existing key if present).
   bound_claims      = local.additional_claims[each.key] != null ? merge(local.additional_claims[each.key], { sub = each.value.bound_subject }) : { sub = each.value.bound_subject }
   bound_claims_type = "glob"
 

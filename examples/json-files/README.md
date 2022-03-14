@@ -4,6 +4,10 @@ This example demonstrates a realistic method of allowing development teams in an
 own repo bindings to Vault through modifying JSON files while allowing for security control (via CODEOWNERS or other PR approval)
 of changes, if necessary.
 
+Note that this method precludes effective use of [`vault_policy`](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/policy)
+resources to generate policy names.
+This method is most effective if policies are generated in a separate process and passed in as part of the rest of the JSON configuration.
+
 # Usage
 
 Dev teams create their own JSON files representing repos they own and wish to bind to a Vault role.
@@ -39,7 +43,7 @@ Dev teams create their own JSON files representing repos they own and wish to bi
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_vault_address"></a> [vault\_address](#input\_vault\_address) | The origin URL of the Vault server. This is a URL with a scheme, a hostname, and a port but with no path. | `string` | n/a | yes |
-| <a name="input_bindings_json_pattern"></a> [bindings\_json\_pattern](#input\_bindings\_json\_pattern) | A pattern designating a collection of JSON files to parse for OIDC binding definitions. For pattern format, see [`fileset`](https://www.terraform.io/language/functions/fileset). | `string` | `"bindings/*.json"` | no |
+| <a name="input_bindings_json_pattern"></a> [bindings\_json\_pattern](#input\_bindings\_json\_pattern) | A pattern designating a collection of JSON files to parse for OIDC binding definitions. For pattern format, see [`fileset`](https://www.terraform.io/language/functions/fileset) . | `string` | `"bindings/*.json"` | no |
 
 ## Outputs
 
