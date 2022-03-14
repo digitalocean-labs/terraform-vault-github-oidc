@@ -17,6 +17,11 @@ The module requires you to configure what repositories to bind to Vault roles an
 conditions the respective repository should be granted access.
 This is encapsulated by the `oidc_bindings` variable.
 
+You can find several examples leveraging this module under `examples`:
+- [Basic usage](/examples/simple-repo)
+- [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
+- [Adding custom additional claims per OIDC binding](/examples/additional-claims)
+
 ## Variables
 
 ### default_ttl
