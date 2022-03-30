@@ -13,34 +13,34 @@ updates:
       include: scope
 
   - package-ecosystem: terraform
-      directory: '/examples/simple-repo/'
-      schedule:
-        interval: weekly
-        time: '00:00'
-      open-pull-requests-limit: 10
-      commit-message:
-        prefix: fix
-        prefix-development: chore
-        include: scope
+    directory: '/examples/simple-repo/'
+    schedule:
+      interval: weekly
+      time: '00:00'
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
 
   - package-ecosystem: terraform
-      directory: '/examples/json-files/'
-      schedule:
-        interval: weekly
-        time: '00:00'
-      open-pull-requests-limit: 10
-      commit-message:
-        prefix: fix
-        prefix-development: chore
-        include: scope
+    directory: '/examples/json-files/'
+    schedule:
+      interval: weekly
+      time: '00:00'
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
 
   - package-ecosystem: terraform
-      directory: '/examples/additional-claims/'
-      schedule:
-        interval: weekly
-        time: '00:00'
-      open-pull-requests-limit: 10
-      commit-message:
-        prefix: fix
-        prefix-development: chore
-        include: scope
+    directory: '/examples/additional-claims/'
+    schedule:
+      interval: weekly
+      time: '00:00'
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
