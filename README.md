@@ -10,12 +10,68 @@ Reference documents that help with understanding the process:
 - <https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault>
 - <https://medium.com/hashicorp-engineering/push-button-security-for-your-github-actions-d4fffde1df20>
 
+Once OIDC authentication is configured on your Vault server via this module, a GitHub repository can leverage
+[hashicorp/vault-action](https://github.com/hashicorp/vault-action) to retrieve secrets from Vault with GitHub OIDC authentication.
+No key management needed!
+
+```yml
+- name: Import Secrets
+  uses: hashicorp/vault-action@v2.4.0
+  id: secrets
+  with:
+    exportEnv: false
+    url: https://<your-vault-URL>
+    path: github-actions
+    method: jwt
+    role: <vault_role_name>
+    secrets: |
+      secret/data/foo/bar fi | MY_SECRET
+
+- name: Access secret
+  run: echo '${{steps.secrets.outputs.MY_SECRET }}' | my_command
+```
+
 # Usage
 
 This module simplifies the creation of the JWT auth backend on Vault for this GitHub Action OIDC use case.
 The module requires you to configure what repositories to bind to Vault roles and policies, and under what
 conditions the respective repository should be granted access.
 This is encapsulated by the `oidc_bindings` variable.
+
+## Examples
+
+You can find several examples leveraging this module under `examples/`:
+- [Basic usage](/examples/simple-repo)
+- [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
+- [Adding custom additional claims per OIDC binding](/examples/additional-claims)
+
+Basic example - one repo, separating secrets access by nonprod and prod pipelines:
+
+```hcl
+module "github-vault-oidc" {
+  source = "digitalocean/github-vault-oidc"
+  version = "~> 1.0.0"
+
+  oidc_bindings = [
+    {
+      audience : "https://github.com/artis3n",
+      vault_role_name : "oidc-test",
+      bound_subject : "repo:artis3n/github-oidc-vault-example:environment:nonprod",
+      vault_policies : [
+        "oidc-policy"
+      ],
+    },
+    {
+      audience : "https://github.com/artis3n",
+      vault_role_name : "oidc-prod-test",
+      bound_subject : "repo:artis3n/github-oidc-vault-example:ref:refs/heads/main",
+      vault_policies : [
+        "oidc-policy"
+      ],
+    },
+  ]
+}
+```
 
 ## Variables
 
@@ -59,8 +115,8 @@ Descriptions for each parameter are below:
 #### audience
 
 By default, the `audience` must be the URL of the repository owner (e.g. `https://github.com/digitalocean`).
-The `audience` can be customized by configuring whatever you'd like and using the `jwtGithubAudience` in parameter in
-[hashicorp/vault-action](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token).
+The `audience` can be customized by configuring [whatever you'd like](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token) and using the `jwtGithubAudience` parameter in
+hashicorp/vault-action.
 
 #### vault_role_name
 
@@ -145,47 +201,15 @@ By default, this role will generate a JWT auth backend on Vault at the path `/gi
 If you wish to customize the path created by this module, modify this variable.
 Do **not** include a leading `/` in the variable content.
 
-## Examples
-
-You can find several examples leveraging this module under `examples`:
-- [Basic usage](/examples/simple-repo)
-- [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
-- [Adding custom additional claims per OIDC binding](/examples/additional-claims)
-
-Basic example - one repo, separating secrets access by nonprod and prod pipelines:
-
-```hcl
-module "github-vault-oidc" {
-  source = "digitalocean-modules/github-vault-oidc"
-  version = "~> 1"
-
-  oidc_bindings = [
-    {
-      audience : "https://github.com/artis3n",
-      vault_role_name : "oidc-test",
-      bound_subject : "repo:artis3n/github-oidc-vault-example:environment:nonprod",
-      vault_policies : [
-        "oidc-policy"
-      ],
-    },
-    {
-      audience : "https://github.com/artis3n",
-      vault_role_name : "oidc-prod-test",
-      bound_subject : "repo:artis3n/github-oidc-vault-example:ref:refs/heads/main",
-      vault_policies : [
-        "oidc-policy"
-      ],
-    },
-  ]
-}
-```
+At this time, this module expects to create and manage the JWT backend leveraged for GitHub OIDC auth.
+You cannot pass in a Terraform reference to an existing backend.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | 1.1.7 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.7 |
 | <a name="requirement_vault"></a> [vault](#requirement\_vault) | ~> 3.3.1 |
 
 ## Providers
@@ -224,8 +248,8 @@ No modules.
 
 # Authors
 
-TBA
+This module is maintained by [Ari Kalfus](https://github.com/artis3n) with help from [these excellent contributors](https://github.com/digitalocean/terraform-vault-github-oidc/graphs/contributors).
 
 # License
 
-MIT licensed. See [LICENSE](LICENSE) for full details.
+Licensed under Apache 2.0. See [LICENSE](LICENSE) for full details.
