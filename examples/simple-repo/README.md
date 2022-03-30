@@ -10,7 +10,7 @@ Example configuration in this directory binds multiple Vault roles to one GitHub
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | 1.1.7 |
-| <a name="requirement_vault"></a> [vault](#requirement\_vault) | 3.3.1 |
+| <a name="requirement_vault"></a> [vault](#requirement\_vault) | ~> 3.3.1 |
 
 ## Providers
 
@@ -28,8 +28,8 @@ Example configuration in this directory binds multiple Vault roles to one GitHub
 
 | Name | Type |
 |------|------|
-| [vault_policy.example](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/resources/policy) | resource |
-| [vault_auth_backend.generated_backend](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/data-sources/auth_backend) | data source |
+| [vault_policy.example](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/policy) | resource |
+| [vault_auth_backend.generated_backend](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/auth_backend) | data source |
 
 ## Inputs
 

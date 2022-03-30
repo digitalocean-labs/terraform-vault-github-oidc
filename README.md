@@ -186,7 +186,7 @@ module "github-vault-oidc" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | 1.1.7 |
-| <a name="requirement_vault"></a> [vault](#requirement\_vault) | 3.3.1 |
+| <a name="requirement_vault"></a> [vault](#requirement\_vault) | ~> 3.3.1 |
 
 ## Providers
 
@@ -202,8 +202,8 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [vault_jwt_auth_backend.github_oidc](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/resources/jwt_auth_backend) | resource |
-| [vault_jwt_auth_backend_role.github_oidc_role](https://registry.terraform.io/providers/hashicorp/vault/3.3.1/docs/resources/jwt_auth_backend_role) | resource |
+| [vault_jwt_auth_backend.github_oidc](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/jwt_auth_backend) | resource |
+| [vault_jwt_auth_backend_role.github_oidc_role](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/jwt_auth_backend_role) | resource |
 
 ## Inputs
 

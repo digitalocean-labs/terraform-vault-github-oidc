@@ -12,6 +12,13 @@ init:
 	cd examples/json-files && terraform init
 	cd examples/additional-claims && terraform init
 
+.PHONY: init-upgrade
+init-upgrade:
+	terraform init -upgrade
+	cd examples/simple-repo && terraform init -upgrade
+	cd examples/json-files && terraform init -upgrade
+	cd examples/additional-claims && terraform init -upgrade
+
 .PHONY: validate
 validate:
 	terraform validate
@@ -48,3 +55,7 @@ apple-json:
 .PHONY: apply-claims
 apply-claims:
 	cd examples/additional-claims && terraform apply
+
+.PHONY: update
+update: init-upgrade
+	pre-commit autoupdate

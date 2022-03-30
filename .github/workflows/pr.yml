@@ -1,0 +1,54 @@
+---
+name: CI
+
+on:
+  - pull_request
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        projects:
+          - ''
+          - 'examples/simple-repo/'
+          - 'examples/json-files/'
+          - 'examples/additional-claims/'
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        working-directory: "./${{ matrix.projects }}"
+
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false
+        working-directory: "./${{ matrix.projects }}"
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+        working-directory: "./${{ matrix.projects }}"
+
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+
+      - name: Install Brew Packages
+        run: brew install terraform-docs tfsec pre-commit
+
+      - name: Run Pre-Commit
+        run: pre-commit run --all-files
