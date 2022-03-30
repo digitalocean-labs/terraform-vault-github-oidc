@@ -39,7 +39,9 @@ jobs:
         working-directory: "./${{ matrix.projects }}"
 
   pre-commit:
-    runs-on: ubuntu-latest
+    # We need to run on macos because the terraform provider lockfile checksums differ by architecture
+    # terraform_providers_lock will fail on different architecture
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -48,7 +50,10 @@ jobs:
         uses: hashicorp/setup-terraform@v1.3.2
 
       - name: Install Brew Packages
-        run: brew install terraform-docs tfsec pre-commit
+        run: |
+          # Need Bash 5 for terraform fmt in pre-commit hook
+          # Nead realpath command for terraform_fmt which we get via coreutils
+          brew install bash coreutils terraform-docs tfsec pre-commit
 
       - name: Run Pre-Commit
         run: pre-commit run --all-files
