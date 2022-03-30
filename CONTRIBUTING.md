@@ -4,13 +4,22 @@
 
 1. Install [Terraform-Docs](https://github.com/terraform-docs/terraform-docs)
 2. Install [tfsec](https://aquasecurity.github.io/tfsec)
-4. Install [pre-commit](https://pre-commit.com/#install) and run:
+3. Install [pre-commit](https://pre-commit.com/#install)
+
+Then run:
 
 ```bash
 pre-commit install --install-hooks
 ```
 
 All code must pass the pre-commit checks to be merged.
+If you encounter errors running `pre-commit run` (particularly on OSX), ensure you are using Bash > 3.
+
+You may need to run:
+
+```bash
+brew install bash coreutils
+```
 
 # Development
 
