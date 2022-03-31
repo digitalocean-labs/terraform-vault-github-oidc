@@ -80,7 +80,7 @@ You can find several examples leveraging this module under `examples/`:
 
 Basic example - one repo, separating secrets access by nonprod and prod pipelines:
 
-```hcl
+```tf
 module "github-vault-oidc" {
   source = "digitalocean/github-oidc/vault"
   version = "~> 1.0.0"
@@ -114,7 +114,7 @@ Note: see the full [Basic usage](/examples/simple-repo) example to see how to le
 
 This input variable must be a list of objects containing the following structure:
 
-```hcl
+```tf
 oidc_bindings = [
   {
     audience: '',
@@ -127,7 +127,7 @@ oidc_bindings = [
 
 There are additional, optional values you can include as well:
 
-```hcl
+```tf
 oidc_bindings = [
   {
     audience: '',
@@ -195,12 +195,12 @@ with OIDC, you may set your `bound_subject` to `repo:ORG_NAME/*` and add an addi
 
 e.g.
 
-```hcl
+```tf
 oidc_bindings = [
   {
     audience: '...',
     vault_role_name: '...',
-    bound_subject: 'repo:digitalocean/*',
+    bound_subject: "repo:digitalocean/*",
     vault_policies: ['...'],
     user_claim: '...',
     additional_claims: [
