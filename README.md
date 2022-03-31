@@ -31,6 +31,8 @@ No credential management needed!
   run: echo '${{steps.secrets.outputs.MY_SECRET }}' | my_command
 ```
 
+Tutorial/example repo: <https://github.com/artis3n/github-oidc-vault-example>.
+
 - [Usage](#usage)
   - [Examples](#examples)
   - [Variables](#variables)
