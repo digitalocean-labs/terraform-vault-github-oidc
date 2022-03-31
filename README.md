@@ -82,7 +82,7 @@ Basic example - one repo, separating secrets access by nonprod and prod pipeline
 
 ```hcl
 module "github-vault-oidc" {
-  source = "digitalocean/github-vault-oidc"
+  source = "digitalocean/github-oidc/vault"
   version = "~> 1.0.0"
 
   oidc_bindings = [
