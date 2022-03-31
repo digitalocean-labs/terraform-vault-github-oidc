@@ -15,6 +15,7 @@ locals {
 }
 
 module "github_oidc" {
+  # source = "digitalocean/github-oidc/vault"
   source = "../../"
 
   oidc_bindings = local.oidc-bindings
