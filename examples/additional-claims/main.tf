@@ -8,6 +8,7 @@ provider "vault" {
 }
 
 module "github_oidc" {
+  # source = "digitalocean/github-oidc/vault"
   source = "../../"
 
   oidc_bindings = [
