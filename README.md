@@ -1,4 +1,4 @@
-# Terraform Module: Hashicorp Vault GitHub OIDC
+# Terraform Module: Hashicorp Vault GitHub OIDC <!-- omit in toc -->
 
 Terraform module to configure Vault for GitHub OIDC authentication from Action runners.
 
@@ -30,6 +30,28 @@ No credential management needed!
 - name: Access secret
   run: echo '${{steps.secrets.outputs.MY_SECRET }}' | my_command
 ```
+
+- [Usage](#usage)
+  - [Examples](#examples)
+  - [Variables](#variables)
+    - [oidc_bindings](#oidc_bindings)
+      - [oidc_bindings.audience](#oidc_bindingsaudience)
+      - [oidc_bindings.vault_role_name](#oidc_bindingsvault_role_name)
+      - [oidc_bindings.bound_subject](#oidc_bindingsbound_subject)
+      - [oidc_bindings.vault_policies](#oidc_bindingsvault_policies)
+      - [oidc_bindings.user_claim](#oidc_bindingsuser_claim)
+      - [oidc_bindings.additional_claims](#oidc_bindingsadditional_claims)
+      - [oidc_bindings.ttl](#oidc_bindingsttl)
+    - [default_ttl](#default_ttl)
+    - [oidc_auth_backend_path](#oidc_auth_backend_path)
+  - [Requirements](#requirements)
+  - [Providers](#providers)
+  - [Modules](#modules)
+  - [Resources](#resources)
+  - [Inputs](#inputs)
+  - [Outputs](#outputs)
+- [Authors](#authors)
+- [License](#license)
 
 # Usage
 
