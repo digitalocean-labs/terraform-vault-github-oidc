@@ -6,6 +6,7 @@ provider "registry.terraform.io/hashicorp/vault" {
   constraints = "~> 3.3.1"
   hashes = [
     "h1:4u5bqCcflSWqJgr3+/02HtP+ZuF4tUaEIUMTW0nv98k=",
+    "h1:i7EC2IF0KParI+JPA5ZtXJrAn3bAntW5gEMLvOXwpW4=",
     "zh:3e1866037f43c1083ff825dce2a9e3853c757bb0121c5ae528ee3cf3f99b4113",
     "zh:49636cc5c4939134e098c4ec0163c41fae103f24d7e1e8fc0432f8ad93d596a0",
     "zh:5258a7001719c4aeb84f4c4da7115b795da4794754938a3c4176a4b578fe93a1",

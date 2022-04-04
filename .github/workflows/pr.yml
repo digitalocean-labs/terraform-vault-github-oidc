@@ -39,9 +39,8 @@ jobs:
         working-directory: "./${{ matrix.projects }}"
 
   pre-commit:
-    # We need to run on macos because the terraform provider lockfile checksums differ by architecture
-    # terraform_providers_lock will fail on different architecture
-    runs-on: macos-latest
+    # Note that changing architectures will cause terraform_providers_lock to fail
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
