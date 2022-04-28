@@ -1,11 +1,11 @@
 terraform {
-  required_version = ">= 1.1.7"
+  required_version = ">= 1.1.0"
   experiments      = [module_variable_optional_attrs]
 
   required_providers {
     vault = {
       source  = "hashicorp/vault"
-      version = "~> 3.5.0"
+      version = ">= 3.4.1"
     }
   }
 }
