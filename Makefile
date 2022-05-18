@@ -57,5 +57,5 @@ apply-claims:
 	cd examples/additional-claims && terraform apply
 
 .PHONY: update
-update: init-upgrade
+update:
 	pre-commit autoupdate
