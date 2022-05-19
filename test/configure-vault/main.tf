@@ -28,6 +28,6 @@ data "vault_policy_document" "read_foo" {
 }
 
 output "seed_secret" {
-  value = vault_generic_secret.example.data
+  value     = vault_generic_secret.example.data
   sensitive = true
 }

@@ -38,7 +38,7 @@ resource "vault_policy" "example" {
 
 data "vault_policy_document" "example" {
   rule {
-    path = "secret/data/foo/bar"
+    path         = "secret/data/foo/bar"
     capabilities = ["list", "read"]
   }
 }

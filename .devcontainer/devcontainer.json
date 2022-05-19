@@ -1,30 +1,39 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.222.0/containers/debian
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.233.0/containers/go
 {
-	"name": "Debian",
+	"name": "Go",
 	"build": {
 		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick an Debian version: bullseye, buster
-		// Use bullseye on local arm64/Apple Silicon.
-		"args": { "VARIANT": "bullseye" }
+		"args": {
+			// Update the VARIANT arg to pick a version of Go: 1, 1.18, 1.17
+			// Append -bullseye or -buster to pin to an OS version.
+			// Use -bullseye variants on local arm64/Apple Silicon.
+			"VARIANT": "1-bullseye",
+			// Options
+			"NODE_VERSION": "none"
+		}
 	},
+	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 
 	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+	"settings": {
+		"go.toolsManagement.checkForUpdates": "local",
+		"go.useLanguageServer": true,
+		"go.gopath": "/go"
+	},
 
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [],
+	"extensions": [
+		"golang.Go",
+		"HashiCorp.terraform"
+	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
-
-	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
-
-	"onCreateCommand": "brew install bash coreutils pre-commit terraform-docs tfsec",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "go version",
+	"onCreateCommand": "brew install act bash coreutils pre-commit terraform-docs tfsec",
 	"postCreateCommand": "pre-commit install --install-hooks; make init",
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
@@ -34,7 +43,6 @@
 		"terraform": "latest",
 		"git": "latest",
 		"github-cli": "latest",
-		"homebrew": "latest",
-		"golang": "latest"
+		"homebrew": "latest"
 	}
 }
