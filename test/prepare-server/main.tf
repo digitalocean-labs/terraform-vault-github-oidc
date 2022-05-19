@@ -1,16 +1,16 @@
 resource "digitalocean_droplet" "vault" {
-  image  = var.droplet-image
+  image  = var.droplet_image
   name   = "vault"
-  region = var.droplet-region
-  size   = var.droplet-size
+  region = var.droplet_region
+  size   = var.droplet_size
 
-  ssh_keys = [digitalocean_ssh_key.vault-prepare.fingerprint]
+  ssh_keys = [digitalocean_ssh_key.vault_prepare.fingerprint]
 
   connection {
     host        = self.ipv4_address
     user        = "root"
     type        = "ssh"
-    private_key = tls_private_key.vault-prepare.private_key_openssh
+    private_key = tls_private_key.vault_prepare.private_key_openssh
     timeout     = "2m"
   }
 
@@ -19,17 +19,17 @@ resource "digitalocean_droplet" "vault" {
   }
 }
 
-resource "digitalocean_ssh_key" "vault-prepare" {
+resource "digitalocean_ssh_key" "vault_prepare" {
   name       = "vault oidc test CI"
-  public_key = trimspace(tls_private_key.vault-prepare.public_key_openssh)
+  public_key = trimspace(tls_private_key.vault_prepare.public_key_openssh)
 }
 
-data "digitalocean_project" "vault-oidc" {
+data "digitalocean_project" "vault_oidc" {
   name = "GitHub OIDC Vault - CI"
 }
 
-resource "digitalocean_project_resources" "vault-oidc" {
-  project = data.digitalocean_project.vault-oidc.id
+resource "digitalocean_project_resources" "vault_oidc" {
+  project = data.digitalocean_project.vault_oidc.id
   resources = [
     digitalocean_droplet.vault.urn
   ]
@@ -38,7 +38,7 @@ resource "digitalocean_project_resources" "vault-oidc" {
 # DO NOT use this resource in "real" projects.
 # See the security notice on https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key
 # We use this here for the short-lived CI suite
-resource "tls_private_key" "vault-prepare" {
+resource "tls_private_key" "vault_prepare" {
   algorithm   = "ED25519"
   ecdsa_curve = "P256"
 }

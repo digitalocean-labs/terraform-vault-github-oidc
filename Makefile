@@ -59,3 +59,11 @@ apply-claims:
 .PHONY: update
 update:
 	pre-commit autoupdate
+
+.PHONY: test
+test:
+	cd test/ && make test
+
+.PHONY: test-cleanup
+test-cleanup:
+	cd test/ && make cleanup

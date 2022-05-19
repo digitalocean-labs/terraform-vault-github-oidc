@@ -4,7 +4,7 @@
 .vscode
 
 # Local .terraform directories
-test/prepare-server/.terraform/*
+**/.terraform/*
 
 # .tfstate files
 *.tfstate
@@ -26,5 +26,3 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-
-.terraform

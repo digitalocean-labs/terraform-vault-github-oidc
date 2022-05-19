@@ -38,11 +38,14 @@ module "github_oidc" {
 
 resource "vault_policy" "example" {
   name   = "oidc-example"
-  policy = <<-EOT
-    path "secret/data/foo/bar" {
-      capabilities = ["list", "read"]
-    }
-  EOT
+  policy = data.vault_policy_document.example.hcl
+}
+
+data "vault_policy_document" "example" {
+  rule {
+    path = "secret/data/foo/bar"
+    capabilities = ["list", "read"]
+  }
 }
 
 data "vault_auth_backend" "generated_backend" {
