@@ -18,5 +18,5 @@ repos:
       - id: terraform_docs
         args:
           - '--args=--sort-by required'
-      # - id: terraform_tfsec
+      - id: terraform_tfsec
       - id: terraform_providers_lock

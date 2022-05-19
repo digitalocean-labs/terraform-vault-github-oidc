@@ -58,7 +58,9 @@ jobs:
           brew install bash coreutils terraform-docs tfsec pre-commit
 
       - name: Run Pre-Commit
-        run: pre-commit run --all-files
+        run: |
+          pre-commit --version
+          pre-commit run --all-files
 
   e2e:
     runs-on: ubuntu-latest
