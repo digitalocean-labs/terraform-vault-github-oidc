@@ -11,6 +11,7 @@ init:
 	cd examples/simple-repo && terraform init
 	cd examples/json-files && terraform init
 	cd examples/additional-claims && terraform init
+	cd test/ && make init
 
 .PHONY: init-upgrade
 init-upgrade:
@@ -18,6 +19,15 @@ init-upgrade:
 	cd examples/simple-repo && terraform init -upgrade
 	cd examples/json-files && terraform init -upgrade
 	cd examples/additional-claims && terraform init -upgrade
+	cd test/ && make init-upgrade
+
+.PHONY: fmt
+fmt:
+	terraform fmt
+	cd examples/simple-repo && terraform fmt
+	cd examples/json-files && terraform fmt
+	cd examples/additional-claims && terraform fmt
+	cd test/ && make fmt
 
 .PHONY: validate
 validate:
@@ -25,6 +35,7 @@ validate:
 	cd examples/simple-repo && terraform validate
 	cd examples/json-files && terraform validate
 	cd examples/additional-claims && terraform validate
+	cd test/ && make validate
 
 .PHONY: plan
 plan: plan-simple
@@ -57,5 +68,13 @@ apply-claims:
 	cd examples/additional-claims && terraform apply
 
 .PHONY: update
-update: init-upgrade
+update:
 	pre-commit autoupdate
+
+.PHONY: test
+test:
+	cd test/ && make test
+
+.PHONY: test-cleanup
+test-cleanup:
+	cd test/ && make cleanup

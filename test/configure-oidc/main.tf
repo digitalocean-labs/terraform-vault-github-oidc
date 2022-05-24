@@ -1,12 +1,3 @@
-// Vault token should be provided in VAULT_TOKEN env var
-provider "vault" {
-  address            = var.vault_address
-  add_address_to_env = true
-  // Used this example with a self-signed cert Vault, hence skip_tls_verify
-  // Don't do this outside of debugging and testing
-  skip_tls_verify = true
-}
-
 module "github_oidc" {
   # source = "digitalocean/github-oidc/vault"
   source = "../../"
@@ -27,12 +18,7 @@ module "github_oidc" {
       vault_policies : [
         vault_policy.example.name,
       ],
-      additional_claims : {
-        # Both technically redundant with the subject claim as-is but used to demonstrate this parameter
-        job_workflow_ref = "artis3n/github-oidc-vault-example/.github/workflows/vault.yml@refs/heads/main"
-        ref              = "refs/heads/main"
-      }
-    }
+    },
   ]
 }
 
@@ -46,8 +32,4 @@ data "vault_policy_document" "example" {
     path         = "secret/data/foo/bar"
     capabilities = ["list", "read"]
   }
-}
-
-data "vault_auth_backend" "generated_backend" {
-  path = module.github_oidc.auth_backend_path
 }

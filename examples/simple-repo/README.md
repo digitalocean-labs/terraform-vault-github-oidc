@@ -30,6 +30,7 @@ Example configuration in this directory binds multiple Vault roles to one GitHub
 |------|------|
 | [vault_policy.example](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/policy) | resource |
 | [vault_auth_backend.generated_backend](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/auth_backend) | data source |
+| [vault_policy_document.example](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/policy_document) | data source |
 
 ## Inputs
 

@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  validate:
+  fmt-validate:
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,6 +15,9 @@ jobs:
           - 'examples/simple-repo/'
           - 'examples/json-files/'
           - 'examples/additional-claims/'
+          - 'test/prepare-server/'
+          - 'test/configure-vault/'
+          - 'test/configure-oidc/'
       fail-fast: false
 
     steps:
@@ -55,4 +58,6 @@ jobs:
           brew install bash coreutils terraform-docs tfsec pre-commit
 
       - name: Run Pre-Commit
-        run: pre-commit run --all-files
+        run: |
+          pre-commit --version
+          pre-commit run --all-files
