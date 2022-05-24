@@ -61,25 +61,3 @@ jobs:
         run: |
           pre-commit --version
           pre-commit run --all-files
-
-  e2e:
-    runs-on: ubuntu-latest
-    environment: CI
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: '^1.18'
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
-        with:
-          terraform_wrapper: false
-
-      - name: Run Tests
-        run: make test
-        env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
