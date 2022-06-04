@@ -11,7 +11,8 @@ jobs:
   # This job runs tests to ensure the test environment is working as expected.
   # This runs in parallel with our 'actual' OIDC tests so that,
   # if an error occurs, we can be confident whether we broke the
-  # testing environment or if an error exists in the OIDC module.
+  # testing environment or if an error exists in the OIDC module
+  # without waiting on both serially.
   test-harness:
     runs-on: ubuntu-latest
     environment: E2E
@@ -69,7 +70,7 @@ jobs:
 
       # This creates a Vault server on a DigitalOcean droplet
       # and runs this module, as can be seen in test/configure-oidc.
-      # Also go in and grab the IP address for this temporary Vault server.
+      # Also goes in and grabs the IP address for this temporary Vault server.
       - name: Setup Vault With OIDC
         id: setup-vault
         run: |

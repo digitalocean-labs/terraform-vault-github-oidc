@@ -20,6 +20,18 @@ type TestSuite struct {
 	PrepareServerOptions *terraform.Options
 }
 
+const (
+	CD_SECRET_PATH        = "secret/data/main/secret"
+	CI_OIDC_SUBJECT       = "repo:digitalocean/terraform-vault-github-oidc:environment:E2E"
+	CI_SECRET_PATH        = "secret/data/foo/bar"
+	CI_TOKEN_POLICY       = "oidc-example"
+	OIDC_AUDIENCE         = "https://github.com/digitalocean"
+	OIDC_BACKEND_CONFIG   = "auth/github-actions/config"
+	OIDC_CI_ROLE_PATH     = "auth/github-actions/role/oidc-ci-test"
+	OIDC_GITHUB_TOKEN_URL = "https://token.actions.githubusercontent.com"
+	TOKEN_TTL             = "60"
+)
+
 func (suite *TestSuite) SetupSuite() {
 	prepareOptions := terraform.WithDefaultRetryableErrors(suite.T(), &terraform.Options{
 		TerraformDir: "./prepare-server",
@@ -56,6 +68,8 @@ func (suite *TestSuite) TestSeedVaultConfiguration() {
 	assert.JSONEq(suite.T(), output, data)
 }
 
+// All the OIDC tests are listed out in this function to avoid constantly
+// building and destroying the Terraform suite.
 func (suite *TestSuite) TestOIDCVaultConfiguration() {
 	seedVaultOptions := terraform.WithDefaultRetryableErrors(suite.T(), &terraform.Options{
 		TerraformDir: "./configure-vault",
@@ -75,20 +89,63 @@ func (suite *TestSuite) TestOIDCVaultConfiguration() {
 	ipOutput := terraform.Output(suite.T(), suite.PrepareServerOptions, "vault_ip")
 	vaultClient := configureVaultClient(ipOutput)
 
-	// Test the token access
-	secret, err := vaultClient.Logical().Read("secret/data/main/secret")
+	// Test what we just validated to ensure we configured the
+	// client library correctly
+	secret, err := vaultClient.Logical().Read(CD_SECRET_PATH)
 	if err != nil {
-		log.Fatalf("::error file=test/vault_oidc_test.go,line=79::Unable to read secret: %v", err)
+		log.Fatalf("Unable to read secret: %v", err)
 	}
 	rawData, ok := secret.Data["data"].(map[string]interface{})
 	if !ok {
-		log.Fatalf("::error file=test/vault_oidc_test.go,line=84::Data type assertion failed: %T %#v", secret.Data["data"], secret.Data["data"])
+		log.Fatalf("Data type assertion failed: %T %#v", secret.Data["data"], secret.Data["data"])
 	}
 	dataString, err := json.Marshal(rawData)
 	if err != nil {
-		log.Fatalf("::error file=test/vault_oidc_test.go,line=89::Failed to marshal data: %v", err)
+		log.Fatalf("Failed to marshal data: %v", err)
 	}
 	assert.JSONEq(suite.T(), data, string(dataString))
+
+	// Test the configuration of the OIDC auth backend
+	authBackend, err := vaultClient.Logical().Read(OIDC_BACKEND_CONFIG)
+	if err != nil {
+		log.Fatalf("Unable to read auth backend data: %v", err)
+	}
+	boundIssuer := fmt.Sprint(authBackend.Data["bound_issuer"])
+	assert.Equal(suite.T(), OIDC_GITHUB_TOKEN_URL, boundIssuer)
+	oidcDiscoveryUrl := fmt.Sprint(authBackend.Data["oidc_discovery_url"])
+	assert.Equal(suite.T(), OIDC_GITHUB_TOKEN_URL, oidcDiscoveryUrl)
+
+	oidcRoleConfig, err := vaultClient.Logical().Read(OIDC_CI_ROLE_PATH)
+	if err != nil {
+		log.Fatalf("Unable to read OIDC role config: %v", err)
+	}
+
+	userClaim := oidcRoleConfig.Data["user_claim"]
+	assert.Equal(suite.T(), "job_workflow_ref", userClaim)
+	tokenTtl := oidcRoleConfig.Data["token_ttl"]
+	assert.Equal(suite.T(), json.Number(TOKEN_TTL), tokenTtl)
+
+	boundAudienceList, ok := oidcRoleConfig.Data["bound_audiences"].([]interface{})
+	if !ok {
+		log.Fatalf("Failed to cast bound_audiences: %T %#v", oidcRoleConfig.Data["bound_audiences"], oidcRoleConfig.Data["bound_audiences"])
+	}
+	assert.Equal(suite.T(), OIDC_AUDIENCE, boundAudienceList[0])
+
+	tokenPolicyList, ok := oidcRoleConfig.Data["token_policies"].([]interface{})
+	if !ok {
+		log.Fatalf("Failed to cast token_policies: %T %#v", oidcRoleConfig.Data["token_policies"], oidcRoleConfig.Data["token_policies"])
+	}
+	assert.Equal(suite.T(), CI_TOKEN_POLICY, tokenPolicyList[0])
+
+	rawBoundClaims, ok := oidcRoleConfig.Data["bound_claims"].(map[string]interface{})
+	if !ok {
+		log.Fatalf("Failed to cast bound_claims to interface map: %T %#v", oidcRoleConfig.Data["bound_claims"], oidcRoleConfig.Data["bound_claims"])
+	}
+	boundSubList, ok := rawBoundClaims["sub"].([]interface{})
+	if !ok {
+		log.Fatalf("Failed to cast bound_claims.sub to interface slice: %T %#v", rawBoundClaims["sub"], rawBoundClaims["sub"])
+	}
+	assert.Equal(suite.T(), CI_OIDC_SUBJECT, boundSubList[0])
 }
 
 func TestOIDCSuite(t *testing.T) {
@@ -104,7 +161,7 @@ func configureVaultClient(vaultAddr string) *vault.Client {
 
 	client, err := vault.NewClient(config)
 	if err != nil {
-		log.Fatalf("::error file=test/vault_oidc_test.go,line=98::unable to initialize Vault client: %v", err)
+		log.Fatalf("Unable to initialize Vault client: %v", err)
 	}
 	client.SetToken("dovaultrootpass")
 
