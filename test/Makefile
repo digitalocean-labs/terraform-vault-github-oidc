@@ -8,9 +8,9 @@ test:
 
 .PHONY: cleanup
 cleanup:
-	#cd configure-oidc && terraform destroy
-	cd configure-vault && terraform destroy
-	cd prepare-server && terraform destroy
+	-cd configure-oidc && terraform destroy -auto-approve
+	-cd configure-vault && terraform destroy -auto-approve
+	-cd prepare-server && terraform destroy -auto-approve
 
 .PHONY: init
 init:
@@ -35,3 +35,9 @@ fmt:
 	cd prepare-server && terraform fmt
 	cd configure-vault && terraform fmt
 	cd configure-oidc && terraform fmt
+
+.PHONY: apply
+apply:
+	cd prepare-server && terraform apply -auto-approve
+	cd configure-vault && terraform apply -auto-approve
+	cd configure-oidc && terraform apply -auto-approve
