@@ -1,10 +1,6 @@
 // Vault token should be provided in VAULT_TOKEN env var
 provider "vault" {
-  address            = var.vault_address
-  add_address_to_env = true
-  // Used this example with a self-signed cert Vault, hence skip_tls_verify
-  // Don't do this outside of debugging and testing
-  skip_tls_verify = true
+  address = var.vault_address
 }
 
 locals {
@@ -15,8 +11,8 @@ locals {
 }
 
 module "github_oidc" {
-  # source = "digitalocean/github-oidc/vault"
-  source = "../../"
+  source  = "digitalocean/github-oidc/vault"
+  version = "~> 1.0.1"
 
   oidc_bindings = local.oidc-bindings
 }

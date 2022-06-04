@@ -1,6 +1,7 @@
+# tfsec:ignore:digitalocean-compute-use-ssh-keys
 resource "digitalocean_droplet" "vault" {
   image  = var.droplet_image
-  name   = "vault"
+  name   = "github-oidc-vault-server"
   region = var.droplet_region
   size   = var.droplet_size
 

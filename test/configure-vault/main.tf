@@ -6,13 +6,22 @@ resource "vault_audit" "audit-file" {
   }
 }
 
-resource "vault_generic_secret" "example" {
+resource "vault_generic_secret" "ci_example" {
   data_json = <<EOT
 {
   "fi": "fofum"
 }
 EOT
   path      = "secret/foo/bar"
+}
+
+resource "vault_generic_secret" "cd_example" {
+  data_json = <<EOT
+{
+  "cdsecret": "only accessible from the main branch"
+}
+EOT
+  path      = "secret/main/secret"
 }
 
 resource "vault_policy" "read_policy" {
@@ -27,7 +36,12 @@ data "vault_policy_document" "read_foo" {
   }
 }
 
-output "seed_secret" {
-  value     = vault_generic_secret.example.data
+output "ci_secret" {
+  value     = vault_generic_secret.ci_example.data
+  sensitive = true
+}
+
+output "cd_secret" {
+  value     = vault_generic_secret.cd_example.data
   sensitive = true
 }
