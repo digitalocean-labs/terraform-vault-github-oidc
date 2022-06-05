@@ -35,6 +35,9 @@ fmt:
 	cd prepare-server && terraform fmt
 	cd configure-vault && terraform fmt
 	cd configure-oidc && terraform fmt
+	go fmt
+	go vet
+	go mod tidy
 
 .PHONY: apply
 apply:
