@@ -24,7 +24,7 @@ Dev teams create their own JSON files representing repos they own and wish to bi
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.5.0 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.6.0 |
 
 ## Modules
 
