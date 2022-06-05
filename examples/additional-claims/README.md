@@ -17,7 +17,7 @@ to an `oidc-binding` via this module.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.5.0 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.6.0 |
 
 ## Modules
 
