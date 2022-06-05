@@ -21,6 +21,9 @@ init-upgrade:
 .PHONY: fmt
 fmt:
 	terraform fmt
+	cd examples/simple-repo && terraform fmt
+	cd examples/json-files && terraform fmt
+	cd examples/additional-claims && terraform fmt
 	cd test/ && make fmt
 
 .PHONY: validate

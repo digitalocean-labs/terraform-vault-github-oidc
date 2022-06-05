@@ -1,62 +1,29 @@
 # Contributing
 
-# Setup
+Thank you for investing your time in contributing to our project!
 
-1. Install [Terraform-Docs](https://github.com/terraform-docs/terraform-docs)
-2. Install [tfsec](https://aquasecurity.github.io/tfsec)
-3. Install [pre-commit](https://pre-commit.com/#install)
+When planning a contribution to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
-Then run:
+## Pull Request Process
 
-```bash
-pre-commit install --install-hooks
-```
+1. Include a detailed pull request description of the changes being made
+2. Run pre-commit hooks (`pre-commit run -a`)
+3. Once all outstanding comments and checklist items have been addressed, your contribution will be merged! Merged PRs will be included in the next release.
 
-All code must pass the pre-commit checks to be merged.
-If you encounter errors running `pre-commit run` (particularly on OSX), ensure you are using Bash > 3.
+## Checklist For Contributions
 
-You may need to run:
+1. Add a [semantics prefix](#semantic-pull-requests) to your PR or commits
+2. Ensure CI tests are passing
+3. Run pre-commit hooks (`pre-commit run -a`)
 
-```bash
-brew install bash coreutils
-```
+## Semantic Pull Requests
 
-# Development
+When generating release notes, the repository owners rely on the following conventional specs:
 
-Leverage the Makefile for easy navigation around the module and its examples.
-
-`make init` will initialize the module and all example directories.
-
-`make validate` will individually run `terraform validate` against all modules and examples in this repo.
-
-`make plan` will generate a plan of the `simple-repo` example.
-Have your IP or hostname of a Vault server ready.
-Note that you will need to provide your own `VAULT_TOKEN` env var.
-
-`make apply` will run an apply of the `simple-repo` example.
-Have your IP or hostname of a Vault server ready.
-Note that you will need to provide your own `VAULT_TOKEN` env var.
-
-## Running GitHub Actions workflow locally
-
-Install [act](https://github.com/nektos/act):
-
-```bash
-brew install act
-```
-
-To test the Terraform, run:
-
-```bash
-act -j validate -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
-```
-
-If you have a lot of hard drive space, and time, you can test the pre-commit workflow step with:
-
-```bash
-act -j pre-commit -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest
-```
-
-This will pull a ~40GB Docker image, so be warned.
-
-However, running `brew install pre-commit && pre-commit run -a` will be much faster and accomplish the same task.
+- `feat:` for new features
+- `fix:` for bug fixes
+- `improvement:` for enhancements
+- `docs:`: for documentation and examples
+- `refactor:`: for code refactoring
+- `test:` for tests
+- `chore:` for miscellaneous chores, like updating CI dependencies
