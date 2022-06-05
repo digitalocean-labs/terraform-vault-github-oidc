@@ -3,7 +3,7 @@ module github.com/digitalocean/terraform-vault-github-oidc
 go 1.18
 
 require (
-	github.com/gruntwork-io/terratest v0.40.10
+	github.com/gruntwork-io/terratest v0.40.13
 	github.com/hashicorp/vault/api v1.6.0
 	github.com/stretchr/testify v1.7.1
 )
@@ -26,7 +26,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.0.5 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
-	github.com/hashicorp/go-getter v1.5.9 // indirect
+	github.com/hashicorp/go-getter v1.5.11 // indirect
 	github.com/hashicorp/go-hclog v0.16.2 // indirect
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
