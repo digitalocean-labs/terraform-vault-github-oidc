@@ -74,6 +74,8 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0
+        with:
+          terraform_wrapper: false
 
       # This creates a Vault server on a DigitalOcean droplet
       # and runs this module, as can be seen in test/configure-oidc.
