@@ -1,5 +1,10 @@
 # Terraform Module: Hashicorp Vault GitHub OIDC <!-- omit in toc -->
 
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub](https://img.shields.io/github/license/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub contributors](https://img.shields.io/github/contributors/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/digitalocean/terraform-vault-github-oidc?style=flat-square)
+
 Terraform module to configure Vault for GitHub OIDC authentication from Action runners.
 
 OIDC authentication allows us to bind GitHub repositories (and subcomponents of a repository, such as a branch, ref, or environment)
@@ -10,7 +15,7 @@ Reference documents that help with understanding the process:
 - <https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault>
 - <https://medium.com/hashicorp-engineering/push-button-security-for-your-github-actions-d4fffde1df20>
 
-Once OIDC authentication is configured on your Vault server via this module, a GitHub repository can leverage
+Once OIDC authentication is configured on a Vault server via this module, a GitHub repository can leverage
 [hashicorp/vault-action](https://github.com/hashicorp/vault-action) to retrieve secrets from Vault with GitHub OIDC authentication.
 No credential management needed!
 
@@ -30,8 +35,6 @@ No credential management needed!
 - name: Access secret
   run: echo '${{steps.secrets.outputs.MY_SECRET }}' | my_command
 ```
-
-Tutorial/example repo: <https://github.com/artis3n/github-oidc-vault-example>.
 
 - [Usage](#usage)
   - [Examples](#examples)
@@ -67,7 +70,7 @@ This is encapsulated by the `oidc_bindings` variable.
 
 You will need to opt-in to this experiment in your `terraform` block:
 
-```tf
+```terraform
 terraform {
   experiments = [module_variable_optional_attrs]
 }
@@ -75,17 +78,21 @@ terraform {
 
 ## Examples
 
+Tutorial/example repo: <https://github.com/artis3n/github-oidc-vault-example>.
+
 You can find several examples leveraging this module under `examples/`:
 - [Basic usage](/examples/simple-repo)
 - [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
 - [Adding custom additional claims per OIDC binding](/examples/additional-claims)
 
+There is another example run in the CI suite at [`test/configure-oidc/main.tf`](test/configure-oidc/main.tf).
+
 Basic example - one repo, separating secrets access by nonprod and prod pipelines:
 
-```tf
+```terraform
 module "github-vault-oidc" {
   source = "digitalocean/github-oidc/vault"
-  version = "~> 1.0.0"
+  version = "~> 1.0.2"
 
   oidc_bindings = [
     {
@@ -93,7 +100,7 @@ module "github-vault-oidc" {
       vault_role_name : "oidc-test",
       bound_subject : "repo:artis3n/github-oidc-vault-example:environment:nonprod",
       vault_policies : [
-        "oidc-policy"
+        vault_policy.example.name,
       ],
     },
     {
@@ -101,14 +108,24 @@ module "github-vault-oidc" {
       vault_role_name : "oidc-prod-test",
       bound_subject : "repo:artis3n/github-oidc-vault-example:ref:refs/heads/main",
       vault_policies : [
-        "oidc-policy"
+        vault_policy.example.name,
       ],
     },
   ]
 }
-```
 
-Note: see the full [Basic usage](/examples/simple-repo) example to see how to leverage `vault_policy` resources for the `oidc_bindings.vault_policies` array.
+resource "vault_policy" "example" {
+  name   = "oidc-example"
+  policy = data.vault_policy_document.example.hcl
+}
+
+data "vault_policy_document" "example" {
+  rule {
+    path         = "secret/data/foo/bar"
+    capabilities = ["list", "read"]
+  }
+}
+```
 
 ## Variables
 
@@ -116,7 +133,7 @@ Note: see the full [Basic usage](/examples/simple-repo) example to see how to le
 
 This input variable must be a list of objects containing the following structure:
 
-```tf
+```terraform
 oidc_bindings = [
   {
     audience: '',
@@ -129,7 +146,7 @@ oidc_bindings = [
 
 There are additional, optional values you can include as well:
 
-```tf
+```terraform
 oidc_bindings = [
   {
     audience: '',
@@ -152,15 +169,17 @@ Descriptions for each parameter are below:
 #### oidc_bindings.audience
 
 By default, the `audience` must be the URL of the repository owner (e.g. `https://github.com/digitalocean`).
+
 The `audience` can be customized by configuring [whatever you'd like](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token) and using the `jwtGithubAudience` parameter in
-hashicorp/vault-action.
+[hashicorp/vault-action](https://github.com/hashicorp/vault-action).
+For example, from an organizational or audit perspective, you may desire to establish a naming scheme such as `audience: "<company>:<org-unit>:<team-name>"`, e.g. `digitalocean:security:product-security`.
 
 #### oidc_bindings.vault_role_name
 
 The `vault_role_name` must be the name of the Vault role you wish to create on the JWT auth backend.
 Each Vault role should be configured for one repo subject - using the same Vault role with different configurations in the rest of
 the parameters will cause this module to fail.
-This is because you would silently overwrite the role configuration.
+This is because you would otherwise silently overwrite the role configuration.
 
 You may want to create multiple Vault roles for a single GitHub repository, e.g. a nonprod CI workflow that needs access
 to CI secrets, and a deployment workflow that publishes a release that needs production secrets.
@@ -183,7 +202,7 @@ This can also come from a [`vault_policy` resource](https://registry.terraform.i
 The `user_claim` is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client.
 This will be used as the name for the Identity entity alias created due to a successful login.
 This must be a field present in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token).
-Defaults to the `default_user_claim` variable if not provided.
+Defaults to the value of the `default_user_claim` variable if not provided.
 
 #### oidc_bindings.additional_claims
 
@@ -193,11 +212,11 @@ Defaults to the `default_user_claim` variable if not provided.
 Each `key` must be a field present in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token).
 
 For example, to leverage [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows)
-with OIDC, you may set your `bound_subject` to `repo:ORG_NAME/*` and add an additional claim of `job_workflow_ref:ORG_NAME/REPO_NAME`.
+with OIDC, you may wish to set your `bound_subject` to `repo:ORG_NAME/*` and add an additional claim of `job_workflow_ref:ORG_NAME/REPO_NAME`.
 
 e.g.
 
-```tf
+```terraform
 oidc_bindings = [
   {
     audience: '...',
@@ -216,7 +235,7 @@ oidc_bindings = [
 
 #### oidc_bindings.ttl
 
-You can also specify a custom `ttl` per role binding if you wish to customize beyond the `default_ttl`.
+You can also specify a custom `ttl` per role binding if you wish to customize beyond the `default_ttl` variable.
 This must be a number of seconds.
 
 ### default_ttl
@@ -224,11 +243,11 @@ This must be a number of seconds.
 **Optional**
 
 The default incremental time-to-live for generated tokens, in seconds.
-Since most uses of [`hashicorp/vault-action`](https://github.com/hashicorp/vault-action) authenticate + retrieve secrets
+Since most uses of [`hashicorp/vault-action`](https://github.com/hashicorp/vault-action) authenticate & retrieve secrets
 in one step during a CI pipeline, the default for this variable is set to 60 seconds.
 If you wish to customize the TTL for all roles, modify this variable.
 You can also specify individual TTL requirements on individual role bindings.
-See [`oidc_bindings.ttl`](#ttl).
+See [`oidc_bindings.ttl`](#oidc_bindings.ttl).
 
 ### oidc_auth_backend_path
 
