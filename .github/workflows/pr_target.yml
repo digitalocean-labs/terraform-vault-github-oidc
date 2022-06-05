@@ -131,7 +131,6 @@ jobs:
           method: jwt
           role: oidc-ci-test
           secrets: |
-            secret/data/foo/bar fi | MY_SECRET
             secret/data/main/secret cdsecret | CANT_ACCESS_SECRET
 
       - name: We cannot access this secret
