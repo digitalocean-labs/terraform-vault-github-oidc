@@ -1,10 +1,9 @@
 # Terraform Module: Hashicorp Vault GitHub OIDC <!-- omit in toc -->
 
-[![End-to-End Tests](https://github.com/digitalocean/terraform-vault-github-oidc/actions/workflows/pr_target.yml/badge.svg)](https://github.com/digitalocean/terraform-vault-github-oidc/actions/workflows/pr_target.yml)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/digitalocean/terraform-vault-github-oidc)
-![GitHub](https://img.shields.io/github/license/digitalocean/terraform-vault-github-oidc)
-![GitHub contributors](https://img.shields.io/github/contributors/digitalocean/terraform-vault-github-oidc)
-![GitHub last commit](https://img.shields.io/github/last-commit/digitalocean/terraform-vault-github-oidc)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub](https://img.shields.io/github/license/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub contributors](https://img.shields.io/github/contributors/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/digitalocean/terraform-vault-github-oidc?style=flat-square)
 
 Terraform module to configure Vault for GitHub OIDC authentication from Action runners.
 
