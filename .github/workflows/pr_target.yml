@@ -2,6 +2,7 @@
 name: End-to-End Tests
 
 on:
+  pull_request:
   # Be very careful using this! Everything under this trigger should be locked behind an Environment Approval
   pull_request_target:
     branches:
