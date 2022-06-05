@@ -81,6 +81,7 @@ jobs:
       - name: Setup Vault With OIDC
         id: setup-vault
         run: |
+          make init
           make test-apply
           VAULT_IP="$(cd test/prepare-server && terraform output vault_ip)"
           echo "::set-output name=VAULT_IP::${VAULT_IP}"
