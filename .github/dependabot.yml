@@ -55,36 +55,3 @@ updates:
       prefix: fix
       prefix-development: chore
       include: scope
-
-  - package-ecosystem: terraform
-    directory: /examples/additional-claims
-    schedule:
-      interval: monthly
-    reviewers:
-      - artis3n
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
-
-  - package-ecosystem: terraform
-    directory: /examples/json-files
-    schedule:
-      interval: monthly
-    reviewers:
-      - artis3n
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
-
-  - package-ecosystem: terraform
-    directory: /examples/simple-repo
-    schedule:
-      interval: monthly
-    reviewers:
-      - artis3n
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
