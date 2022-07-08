@@ -94,7 +94,7 @@ Basic example - one repo, separating secrets access by nonprod and prod pipeline
 ```terraform
 module "github-vault-oidc" {
   source = "digitalocean/github-oidc/vault"
-  version = "~> 1.0.2"
+  version = "~> 1.1.0"
 
   oidc_bindings = [
     {
