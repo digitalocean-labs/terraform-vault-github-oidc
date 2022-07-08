@@ -23,7 +23,7 @@ to an `oidc-binding` via this module.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_github_oidc"></a> [github\_oidc](#module\_github\_oidc) | digitalocean/github-oidc/vault | ~> 1.0.2 |
+| <a name="module_github_oidc"></a> [github\_oidc](#module\_github\_oidc) | digitalocean/github-oidc/vault | ~> 1.1.0 |
 
 ## Resources
 
