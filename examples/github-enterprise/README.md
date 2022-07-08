@@ -1,6 +1,7 @@
-# Simple Repo Example
+# GitHub Enterprise Server Example
 
 Example configuration in this directory binds multiple Vault roles to one GitHub repository with GitHub OIDC.
+When using GitHub Enterprise Server, configure this module as normal and update the `github_identity_provider` variable [as applicable](https://github.com/digitalocean/terraform-vault-github-oidc#github_identity_provider) for your GitHub server.
 
 # Usage
 
@@ -16,7 +17,7 @@ Example configuration in this directory binds multiple Vault roles to one GitHub
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.6.0 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | >= 3.4.1 |
 
 ## Modules
 

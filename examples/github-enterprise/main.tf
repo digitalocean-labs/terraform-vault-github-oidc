@@ -7,6 +7,8 @@ module "github_oidc" {
   source  = "digitalocean/github-oidc/vault"
   version = "~> 1.0.2"
 
+  github_identity_provider = "https://github.fakeexample.digitalocean.com/_services/token"
+
   oidc_bindings = [
     {
       audience : "https://github.com/artis3n",
