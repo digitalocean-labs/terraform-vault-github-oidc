@@ -15,7 +15,7 @@ jobs:
           - 'examples/simple-repo/'
           - 'examples/json-files/'
           - 'examples/additional-claims/'
-          - 'examples/github-enterprise/'
+          # - 'examples/github-enterprise/'
           - 'test/prepare-server/'
           - 'test/configure-vault/'
           - 'test/configure-oidc/'
