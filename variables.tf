@@ -1,9 +1,3 @@
-variable "oidc_auth_backend_path" {
-  type        = string
-  description = "The path to mount the OIDC auth backend."
-  default     = "github-actions"
-}
-
 variable "default_ttl" {
   type        = number
   description = "The default incremental time-to-live for generated tokens, in seconds."
@@ -14,6 +8,18 @@ variable "default_user_claim" {
   type        = string
   description = "This is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client. This will be used as the name for the Identity entity alias created due to a successful login. This must be a field present in the [GitHub OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Consider the impact on [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows#how-the-token-works-with-reusable-workflows) if you are thinking of changing this value from the default."
   default     = "job_workflow_ref"
+}
+
+variable "github_identity_provider" {
+  type        = string
+  description = "The JWT authentication URL used for the GitHub OIDC trust configuration. This should not be modified unless you are running GitHub Enterprise Server, in which case you should provide a URL in the format: `https://HOSTNAME/_services/token`. This requires GitHub Enterprise Server version 3.5 or higher. See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>."
+  default     = "https://token.actions.githubusercontent.com"
+}
+
+variable "oidc_auth_backend_path" {
+  type        = string
+  description = "The path to mount the OIDC auth backend."
+  default     = "github-actions"
 }
 
 variable "oidc_bindings" {
