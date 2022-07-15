@@ -67,7 +67,7 @@ The module requires you to configure what repositories to bind to Vault roles an
 conditions the respective repository should be granted access.
 This is encapsulated by the `oidc_bindings` variable.
 
-| :exclamation: Note: This module uses the experimental Terraform feature [`module_variable_optional_attrs`](https://www.terraform.io/language/expressions/type-constraints#experimental-optional-object-type-attributes) first introduced in v0.14. |
+| :exclamation: Note: This module uses the experimental Terraform feature [`module_variable_optional_attrs`](https://www.terraform.io/language/expressions/type-constraints#experimental-optional-object-type-attributes) first introduced in Terraform v0.14. |
 |---|
 
 You will need to opt-in to this experiment in your `terraform` block:
@@ -78,6 +78,8 @@ terraform {
 }
 ```
 
+We really like this feature and look forward to a point where it is standardized in Terraform's feature set.
+
 ## Examples
 
 Tutorial/example repo: <https://github.com/artis3n/github-oidc-vault-example>.
@@ -86,10 +88,11 @@ You can find several examples leveraging this module under `examples/`:
 - [Basic usage](/examples/simple-repo)
 - [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
 - [Adding custom additional claims per OIDC binding](/examples/additional-claims)
+- [Leveraging this module on-prem with GitHub Enterprise Server](/examples/github-enterprise)
 
 There is another example run in the CI suite at [`test/configure-oidc/main.tf`](test/configure-oidc/main.tf).
 
-Basic example - one repo, separating secrets access by nonprod and prod pipelines:
+Basic example - one repo, separating secrets access by nonprod and prod pipelines. Note that two different pipelines would typically access different secrets and therefore have different Vault policies.
 
 ```terraform
 module "github-vault-oidc" {
@@ -195,7 +198,7 @@ See [GitHub's documentation](https://docs.github.com/en/actions/deployment/secur
 #### oidc_bindings.vault_policies
 
 `vault_policies` must be a list of Vault policy strings to grant to the `vault_role_name` Vault role being configured.
-This can also come from a [`vault_policy` resource](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/policy#name).
+These can also come from [`vault_policy` resources](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/policy#name).
 
 #### oidc_bindings.user_claim
 
@@ -203,8 +206,13 @@ This can also come from a [`vault_policy` resource](https://registry.terraform.i
 
 The `user_claim` is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client.
 This will be used as the name for the Identity entity alias created due to a successful login.
+This means it will determine the `auth.display_name` value in Vault audit logs.
+
 This must be a field present in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token).
-Defaults to the value of the `default_user_claim` variable if not provided.
+Defaults to the value of the [`default_user_claim`](#default_user_claim) variable if not provided.
+
+We strongly recommend you keep a consistent format for `auth.display_name` for monitoring of Vault's audit log.
+Instead of changing the `user_claim` for a specific role, consider modifying the [`default_user_claim`](#default_user_claim) variable to apply a format change to all roles managed through this module.
 
 #### oidc_bindings.additional_claims
 
@@ -237,7 +245,7 @@ oidc_bindings = [
 
 #### oidc_bindings.ttl
 
-You can also specify a custom `ttl` per role binding if you wish to customize beyond the `default_ttl` variable.
+You can also specify a custom `ttl` per role binding if you wish to customize beyond the [`default_ttl`](#default_ttl) variable.
 This must be a number of seconds.
 
 ### default_ttl
@@ -246,10 +254,23 @@ This must be a number of seconds.
 
 The default incremental time-to-live for generated tokens, in seconds.
 Since most uses of [`hashicorp/vault-action`](https://github.com/hashicorp/vault-action) authenticate & retrieve secrets
-in one step during a CI pipeline, the default for this variable is set to 60 seconds.
+in one step during a CI pipeline, the default for this variable is set to **60 seconds**.
+
 If you wish to customize the TTL for all roles, modify this variable.
-You can also specify individual TTL requirements on individual role bindings.
+You can also specify individual TTL requirements on individual roles that may have edge case needs for a different TTL.
 See [`oidc_bindings.ttl`](#oidc_bindings.ttl).
+
+### default_user_claim
+
+**Optional**
+
+This is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client.
+This will be used as the name for the Identity entity alias created from a successful login.
+This means it will determine the `auth.display_name` value in Vault audit logs.
+
+This must be a field prevent in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token).
+
+This is set to `job_workflow_ref` by default.
 
 ### oidc_auth_backend_path
 
@@ -257,7 +278,7 @@ See [`oidc_bindings.ttl`](#oidc_bindings.ttl).
 
 By default, this role will generate a JWT auth backend on Vault at the path `/github-actions`.
 If you wish to customize the path created by this module, modify this variable.
-Do **not** include a leading `/` in the variable content.
+Do **not** include a leading `/` in the variable value (e.g. use `github-actions` not `/github-actions`).
 
 At this time, this module expects to create and manage the JWT backend leveraged for GitHub OIDC auth.
 You cannot pass in a Terraform reference to an existing backend.
