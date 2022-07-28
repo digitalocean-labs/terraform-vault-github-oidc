@@ -16,6 +16,8 @@ jobs:
   test-harness:
     runs-on: ubuntu-latest
     environment: E2E
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@v3

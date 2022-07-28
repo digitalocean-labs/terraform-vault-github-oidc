@@ -7,6 +7,8 @@ on:
 jobs:
   fmt-validate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     strategy:
       matrix:
@@ -45,6 +47,8 @@ jobs:
   pre-commit:
     # Note that changing architectures will cause terraform_providers_lock to fail
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@v3
