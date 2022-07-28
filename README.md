@@ -2,6 +2,7 @@
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/digitalocean/terraform-vault-github-oidc?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/digitalocean/terraform-vault-github-oidc?style=flat-square)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6305/badge)](https://bestpractices.coreinfrastructure.org/projects/6305)
 ![GitHub contributors](https://img.shields.io/github/contributors/digitalocean/terraform-vault-github-oidc?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/digitalocean/terraform-vault-github-oidc?style=flat-square)
 
@@ -49,6 +50,7 @@ e.g.
       - [oidc_bindings.additional_claims](#oidc_bindingsadditional_claims)
       - [oidc_bindings.ttl](#oidc_bindingsttl)
     - [default_ttl](#default_ttl)
+    - [default_user_claim](#default_user_claim)
     - [oidc_auth_backend_path](#oidc_auth_backend_path)
     - [github_identity_provider](#github_identity_provider)
   - [Requirements](#requirements)
