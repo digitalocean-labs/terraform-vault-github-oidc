@@ -18,9 +18,9 @@ jobs:
           - 'examples/json-files/'
           - 'examples/additional-claims/'
           - 'examples/github-enterprise/'
-          - 'test/prepare-server/'
-          - 'test/configure-vault/'
-          - 'test/configure-oidc/'
+          - 'test/terratest/prepare-server/'
+          - 'test/terratest/configure-vault/'
+          - 'test/terratest/configure-oidc/'
       fail-fast: false
 
     steps:
