@@ -11,12 +11,12 @@ init:
 	cd examples/simple-repo && terraform init
 	cd examples/json-files && terraform init
 	cd examples/additional-claims && terraform init
-	cd test/ && make init
+	cd test/terratest/ && make init
 
 .PHONY: init-upgrade
 init-upgrade:
 	terraform init -upgrade
-	cd test/ && make init-upgrade
+	cd test/terratest/ && make init-upgrade
 
 .PHONY: fmt
 fmt:
@@ -24,7 +24,7 @@ fmt:
 	cd examples/simple-repo && terraform fmt
 	cd examples/json-files && terraform fmt
 	cd examples/additional-claims && terraform fmt
-	cd test/ && make fmt
+	cd test/terratest/ && make fmt
 
 .PHONY: validate
 validate:
@@ -32,7 +32,7 @@ validate:
 	cd examples/simple-repo && terraform validate
 	cd examples/json-files && terraform validate
 	cd examples/additional-claims && terraform validate
-	cd test/ && make validate
+	cd test/terratest/ && make validate
 
 .PHONY: update
 update:
@@ -40,16 +40,16 @@ update:
 
 .PHONY: test
 test:
-	cd test/ && make test
+	cd test/terratest/ && make test
 
 .PHONY: test-apply
 test-apply:
-	cd test/ && make apply
+	cd test/terratest/ && make apply
 
 .PHONY: test-cleanup
 test-cleanup:
-	cd test/ && make cleanup
+	cd test/terratest/ && make cleanup
 
 .PHONY: taint
 taint:
-	cd test/prepare-server && terraform taint digitalocean_droplet.vault
+	cd test/terratest/prepare-server && terraform taint digitalocean_droplet.vault

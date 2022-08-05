@@ -35,8 +35,10 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "go version",
-	"onCreateCommand": "brew install act bash coreutils pre-commit terraform-docs tfsec vault",
+	"onCreateCommand": "brew install act bash coreutils packer pre-commit terraform-docs tfsec vault",
+	"updateContentCommand": "brew update && brew upgrade",
 	"postCreateCommand": "pre-commit install --install-hooks; make init",
+	"postStartCommand": "sudo apt update && sudo apt full-upgrade -y",
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
