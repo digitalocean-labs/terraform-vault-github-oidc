@@ -25,9 +25,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v3.2.1
         with:
-          go-version-file: test/go.mod
+          go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0
@@ -63,9 +63,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v3.2.1
         with:
-          go-version-file: test/go.mod
+          go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0
@@ -155,3 +155,31 @@ jobs:
         run: make test-cleanup
         env:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+  lint-packer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    environment: E2E
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Install Packer
+        run: brew install packer
+
+      - name: Initialize Packer
+        run: packer init .
+        working-directory: test/packer
+
+      - name: Validate Template
+        run: packer validate .
+        working-directory: test/packer
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      - name: Template Format Check
+        run: packer fmt -check .
+        working-directory: test/packer

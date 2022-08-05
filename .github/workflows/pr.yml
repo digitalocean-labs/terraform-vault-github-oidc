@@ -44,29 +44,6 @@ jobs:
         run: terraform validate
         working-directory: "./${{ matrix.projects }}"
 
-  lint-packer:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install Packer
-        run: brew install packer
-
-      - name: Initialize Packer
-        run: packer init .
-        working-directory: test/packer
-
-      - name: Validate Template
-        run: packer validate .
-        working-directory: test/packer
-
-      - name: Template Format Check
-        run: packer fmt -check .
-        working-directory: test/packer
-
   pre-commit:
     # Note that changing architectures will cause terraform_providers_lock to fail
     runs-on: ubuntu-latest
@@ -79,7 +56,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version-file: test/go.mod
+          go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0

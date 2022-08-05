@@ -38,6 +38,7 @@ jobs:
           packer build .
 
           echo "New snapshot created: `$(doctl compute snapshot list packer-vault-\* --format "Name" | tail -1)`" >>> $GITHUB_STEP_SUMMARY
+          echo "" >>> $GITHUB_STEP_SUMMARY
         working-directory: test/packer
         env:
           DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
@@ -53,3 +54,4 @@ jobs:
           echo "---" >>> $GITHUB_STEP_SUMMARY
           echo "| ID | Name |" >>> $GITHUB_STEP_SUMMARY
           echo "${deleted_snapshots}" >>> $GITHUB_STEP_SUMMARY
+          echo "---" >>> $GITHUB_STEP_SUMMARY
