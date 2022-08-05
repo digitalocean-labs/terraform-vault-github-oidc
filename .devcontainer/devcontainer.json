@@ -27,7 +27,8 @@
 		"golang.Go",
 		"HashiCorp.terraform",
 		"yzhang.markdown-all-in-one",
-		"ms-vscode.makefile-tools"
+		"ms-vscode.makefile-tools",
+		"HashiCorp.HCL"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

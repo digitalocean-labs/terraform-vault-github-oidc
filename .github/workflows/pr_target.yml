@@ -37,14 +37,14 @@ jobs:
       - name: Run Tests
         run: make test
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       # If terratest failed to clean up the cloud resources, let's do that now.
       - name: Cleanup if failed
         if: failure()
         run: make test-cleanup
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
   oidc-test:
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
           VAULT_IP="$(cd test/prepare-server && terraform output vault_ip | sed 's/\"//g')"
           echo "::set-output name=VAULT_IP::${VAULT_IP}"
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       # We've configured Vault, so now let's act as a user and try to read secrets!
       #
@@ -154,4 +154,4 @@ jobs:
         if: always()
         run: make test-cleanup
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}

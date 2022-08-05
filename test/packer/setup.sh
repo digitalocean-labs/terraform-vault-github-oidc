@@ -3,16 +3,14 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt -y update
-apt -y full-upgrade
-
 # Install Vault
-apt install -y gpg at
+apt-get -o DPkg::Lock::Timeout=60 install -y gpg at
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
 gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
 [ "$(gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint | head -n 4 | tail -n 1 | xargs)" = "E8A0 32E0 94D8 EB4E A189 D270 DA41 8C88 A321 9F7B" ]
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
-apt update && apt -y install vault
+apt-get -o DPkg::Lock::Timeout=60 update
+apt-get -o DPkg::Lock::Timeout=60 -y install vault
 vault --version
 
 # Mkcert
@@ -40,8 +38,3 @@ listener "tcp" {
 ui = true
 disable_mlock = true
 ' > vault-config.hcl
-# Root token is only used during our CI runtime!
-# We start a dev server but restrict it to localhost so that we can run an HTTPS port externally, but have the root token configured explicitly
-echo "vault server -config=/root/vault-config.hcl -dev -dev-listen-address=127.0.0.1:8222 -dev-root-token-id=dovaultrootpass -non-interactive" | at now
-# Let the Vault server come up
-sleep 2

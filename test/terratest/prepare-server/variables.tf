@@ -1,4 +1,4 @@
-variable "DO_token" {
+variable "do_token" {
   type        = string
   sensitive   = true
   description = "DigitalOcean API token"
@@ -19,5 +19,5 @@ variable "droplet_region" {
 variable "droplet_size" {
   type        = string
   description = "The size of the Droplet"
-  default     = "s-1vcpu-1gb"
+  default     = "s-1vcpu-1gb-amd"
 }
