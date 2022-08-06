@@ -1,23 +1,27 @@
 # tfsec:ignore:digitalocean-compute-use-ssh-keys
 resource "digitalocean_droplet" "vault" {
-  image  = var.droplet_image
-  name   = "github-oidc-vault-server"
-  region = var.droplet_region
-  size   = var.droplet_size
+  image         = data.digitalocean_droplet_snapshot.vault-snapshot.id
+  name          = "github-oidc-vault-server"
+  region        = var.droplet_region
+  size          = var.droplet_size
+  droplet_agent = false
 
   ssh_keys = [digitalocean_ssh_key.vault_prepare.fingerprint]
 
-  connection {
-    host        = self.ipv4_address
-    user        = "root"
-    type        = "ssh"
-    private_key = tls_private_key.vault_prepare.private_key_openssh
-    timeout     = "2m"
-  }
+  user_data = file("${path.module}/userdata.sh")
 
-  provisioner "remote-exec" {
-    script = "${path.module}/setup.sh"
+  # Wait for the user data script to run and start Vault, takes roughly 1 minute
+  provisioner "local-exec" {
+    command = "sleep 60"
   }
+}
+
+# This image is built weekly from test/packer
+# See the .github/workflows/build-image.yml workflow
+data "digitalocean_droplet_snapshot" "vault-snapshot" {
+  name_regex  = "^packer-vault-base-*"
+  region      = var.droplet_region
+  most_recent = true
 }
 
 resource "digitalocean_ssh_key" "vault_prepare" {

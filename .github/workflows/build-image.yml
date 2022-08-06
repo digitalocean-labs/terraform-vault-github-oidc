@@ -1,0 +1,57 @@
+---
+name: Build Droplet Snapshot
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  packer-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Workflow only gets the DIGITALOCEAN_TOKEN if it is run from main
+    environment: CI-Builds
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Packer
+        run: brew install packer
+
+      - name: Install DigitalOcean CLI
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      - name: Initialize Packer
+        run: packer init .
+        working-directory: test/packer
+
+      - name: Validate Template
+        run: packer validate .
+        working-directory: test/packer
+
+      - name: Build Droplet Snapshot
+        run: |
+          packer build .
+
+          echo "New snapshot created: `$(doctl compute snapshot list packer-vault-\* --format "Name" | tail -1)`" >>> $GITHUB_STEP_SUMMARY
+          echo "" >>> $GITHUB_STEP_SUMMARY
+        working-directory: test/packer
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+      - name: Trim old snapshots - retain most recent 3
+        run: |
+          deleted_snapshots="$(doctl compute snapshot list packer-vault-\* --format "ID,Name" --no-header | sed '$d' | sed '$d' | sed '$d' | awk '{$1=$1}1' OFS="\` | \`" | sed 's/^/| `/' | sed 's/$/` |/')"
+
+          doctl compute snapshot list packer-vault-\* --format "ID" --no-header | sed '$d' | sed '$d' | sed '$d' | xargs doctl compute snapshot delete -f
+
+          echo "Deleted old snapshots :bomb: :" >>> $GITHUB_STEP_SUMMARY
+          echo "" >>> $GITHUB_STEP_SUMMARY
+          echo "---" >>> $GITHUB_STEP_SUMMARY
+          echo "| ID | Name |" >>> $GITHUB_STEP_SUMMARY
+          echo "${deleted_snapshots}" >>> $GITHUB_STEP_SUMMARY
+          echo "---" >>> $GITHUB_STEP_SUMMARY

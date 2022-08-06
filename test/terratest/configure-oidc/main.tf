@@ -1,6 +1,6 @@
 module "github_oidc" {
   # source = "digitalocean/github-oidc/vault"
-  source = "../../"
+  source = "../../../"
 
   oidc_bindings = [
     {

@@ -25,9 +25,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v3.2.1
         with:
-          go-version-file: test/go.mod
+          go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0
@@ -37,14 +37,14 @@ jobs:
       - name: Run Tests
         run: make test
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       # If terratest failed to clean up the cloud resources, let's do that now.
       - name: Cleanup if failed
         if: failure()
         run: make test-cleanup
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
   oidc-test:
     runs-on: ubuntu-latest
@@ -63,9 +63,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v3.2.1
         with:
-          go-version-file: test/go.mod
+          go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.0
@@ -83,7 +83,7 @@ jobs:
           VAULT_IP="$(cd test/prepare-server && terraform output vault_ip | sed 's/\"//g')"
           echo "::set-output name=VAULT_IP::${VAULT_IP}"
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       # We've configured Vault, so now let's act as a user and try to read secrets!
       #
@@ -154,4 +154,32 @@ jobs:
         if: always()
         run: make test-cleanup
         env:
-          TF_VAR_DO_token: ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
+  lint-packer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    environment: E2E
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Install Packer
+        run: brew install packer
+
+      - name: Initialize Packer
+        run: packer init .
+        working-directory: test/packer
+
+      - name: Template Format Check
+        run: packer fmt -check .
+        working-directory: test/packer
+
+      - name: Validate Template
+        run: packer validate .
+        working-directory: test/packer
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}

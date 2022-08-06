@@ -13,7 +13,7 @@ updates:
       include: scope
 
   - package-ecosystem: gomod
-    directory: /test
+    directory: /test/terratest
     schedule:
       interval: monthly
     reviewers:
@@ -24,7 +24,7 @@ updates:
       include: scope
 
   - package-ecosystem: terraform
-    directory: /test/prepare-server
+    directory: /test/terratest/prepare-server
     schedule:
       interval: monthly
     reviewers:
@@ -35,7 +35,7 @@ updates:
       include: scope
 
   - package-ecosystem: terraform
-    directory: /test/configure-vault
+    directory: /test/terratest/configure-vault
     schedule:
       interval: monthly
     reviewers:
@@ -46,7 +46,7 @@ updates:
       include: scope
 
   - package-ecosystem: terraform
-    directory: /test/configure-oidc
+    directory: /test/terratest/configure-oidc
     schedule:
       interval: monthly
     reviewers:
