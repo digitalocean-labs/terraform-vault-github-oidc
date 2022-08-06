@@ -32,6 +32,8 @@ jobs:
       - name: Validate Template
         run: packer validate .
         working-directory: test/packer
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       - name: Build Droplet Snapshot
         run: |
