@@ -3,7 +3,7 @@ name: End-to-End Tests
 
 on:
   # Be very careful using this! Everything under this trigger should be locked behind an Environment Approval
-  pull_request:
+  pull_request_target:
     branches:
       - main
 
@@ -174,12 +174,12 @@ jobs:
         run: packer init .
         working-directory: test/packer
 
+      - name: Template Format Check
+        run: packer fmt -check .
+        working-directory: test/packer
+
       - name: Validate Template
         run: packer validate .
         working-directory: test/packer
         env:
           DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
-
-      - name: Template Format Check
-        run: packer fmt -check .
-        working-directory: test/packer

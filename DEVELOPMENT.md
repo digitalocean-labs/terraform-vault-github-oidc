@@ -49,6 +49,8 @@ Additions, changes, and fixes should be accompanied with tests.
 
 The general strategy of the tests is to verify the correct configuration of HashiCorp Vault for this OIDC use case with GitHub, thus ensuring the root module is functionally correct.
 
+To streamline the testing that occurs in pull requests, this repo builds a weekly Droplet snapshot made up of a base Ubuntu image with Vault pre-installed and ready for configuration. This increases stability in PRs as well. In the event of a build failure, PR reviews will continue testing against the last successfully generated snapshot.
+
 ### Test Environment
 
 Given the module binds GitHub OIDC authentication, the test environment must run on a GitHub Actions workflow.

@@ -41,6 +41,8 @@ validate:
 .PHONY: update
 update:
 	pre-commit autoupdate
+	cd test/terratest && make init-upgrade
+	cd test/packer && make init-upgrade
 
 .PHONY: test
 test:
