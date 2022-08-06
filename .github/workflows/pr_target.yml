@@ -80,7 +80,7 @@ jobs:
         run: |
           make init
           make test-apply
-          VAULT_IP="$(cd test/prepare-server && terraform output vault_ip | sed 's/\"//g')"
+          VAULT_IP="$(cd test/terratest/prepare-server && terraform output vault_ip | sed 's/\"//g')"
           echo "::set-output name=VAULT_IP::${VAULT_IP}"
         env:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
