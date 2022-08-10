@@ -92,7 +92,7 @@ You can find several examples leveraging this module under `examples/`:
 - [Adding custom additional claims per OIDC binding](/examples/additional-claims)
 - [Leveraging this module on-prem with GitHub Enterprise Server](/examples/github-enterprise)
 
-There is another example run in the CI suite at [`test/configure-oidc/main.tf`](test/configure-oidc/main.tf).
+There is another example run in the CI suite at [`test/terratest/configure-oidc/main.tf`](test/terratest/configure-oidc/main.tf).
 
 Basic example - one repo, separating secrets access by nonprod and prod pipelines. Note that two different pipelines would typically access different secrets and therefore have different Vault policies.
 
