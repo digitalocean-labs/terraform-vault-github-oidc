@@ -10,9 +10,12 @@ resource "digitalocean_droplet" "vault" {
 
   user_data = file("${path.module}/userdata.sh")
 
-  # Wait for the user data script to run and start Vault, takes roughly 1 minute
+  # Wait for the user data script to run and start Vault
+  # This is relatively brittle, and if it is too short relative
+  # to the runtime of cloud-init and the userdata script, Vault
+  # will not be available and the tests will fail.
   provisioner "local-exec" {
-    command = "sleep 60"
+    command = "sleep 90"
   }
 }
 
