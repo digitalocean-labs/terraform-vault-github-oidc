@@ -10,12 +10,16 @@ resource "digitalocean_droplet" "vault" {
 
   user_data = file("${path.module}/userdata.sh")
 
-  # Wait for the user data script to run and start Vault
-  # This is relatively brittle, and if it is too short relative
-  # to the runtime of cloud-init and the userdata script, Vault
-  # will not be available and the tests will fail.
-  provisioner "local-exec" {
-    command = "sleep 90"
+  connection {
+    type        = "ssh"
+    host        = self.ipv4_address
+    user        = "root"
+    private_key = tls_private_key.vault_prepare.private_key_openssh
+  }
+
+  # Wait for the user data script to complete, including starting Vault
+  provisioner "remote-exec" {
+    inline = ["cloud-init status --wait > /dev/null"]
   }
 }
 

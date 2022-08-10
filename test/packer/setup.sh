@@ -19,11 +19,13 @@ chmod +x mkcert-v*-linux-amd64
 mv mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 echo "mkcert version:" "$(mkcert -version)"
 mkcert -install
-
+# This is going to set the wrong IP address given Terraform will generate a
+# Droplet with a different IP address, but whatever.
+# We skip TLS verification anyway.
 IPV4_ADDRESS="$(curl -s http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)"
 mkcert "${IPV4_ADDRESS}" localhost 127.0.0.1 ::1
-mv "${IPV4_ADDRESS}"*-key.pem vault-key.pem
-mv "${IPV4_ADDRESS}"*.pem vault.pem
+mv "${IPV4_ADDRESS}"*-key.pem /root/vault-key.pem
+mv "${IPV4_ADDRESS}"*.pem /root/vault.pem
 
 # Configure Vault for CI testing
 echo '
