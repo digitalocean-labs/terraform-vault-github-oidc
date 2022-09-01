@@ -3,7 +3,7 @@ module github.com/digitalocean/terraform-vault-github-oidc
 go 1.18
 
 require (
-	github.com/gruntwork-io/terratest v0.40.19
+	github.com/gruntwork-io/terratest v0.40.20
 	github.com/hashicorp/vault/api v1.7.2
 	github.com/stretchr/testify v1.8.0
 )
