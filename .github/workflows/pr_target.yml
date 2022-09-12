@@ -25,7 +25,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Go
-        uses: actions/setup-go@v3.2.1
+        uses: actions/setup-go@v3.3.0
         with:
           go-version-file: test/terratest/go.mod
 
@@ -63,7 +63,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Go
-        uses: actions/setup-go@v3.2.1
+        uses: actions/setup-go@v3.3.0
         with:
           go-version-file: test/terratest/go.mod
 
