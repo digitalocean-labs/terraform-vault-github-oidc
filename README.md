@@ -69,18 +69,11 @@ The module requires you to configure what repositories to bind to Vault roles an
 conditions the respective repository should be granted access.
 This is encapsulated by the `oidc_bindings` variable.
 
-| :exclamation: Note: This module uses the experimental Terraform feature [`module_variable_optional_attrs`](https://www.terraform.io/language/expressions/type-constraints#experimental-optional-object-type-attributes) first introduced in Terraform v0.14. |
-|---|
-
-You will need to opt-in to this experiment in your `terraform` block:
-
-```terraform
-terraform {
-  experiments = [module_variable_optional_attrs]
-}
-```
-
-We really like this feature and look forward to a point where it is standardized in Terraform's feature set.
+> **Note**
+> v2 of this module adopts Terraform 1.3's standardized support of [optional object type attributes](https://www.terraform.io/language/expressions/type-constraints#optional-object-type-attributes).
+> Therefore, Terraform 1.3+ is required.
+>
+> Users of Terraform 1.2 or earlier can use v1.1.0 of this module with the [`module_variable_optional_attrs`](https://www.terraform.io/language/v1.2.x/expressions/type-constraints#experimental-optional-object-type-attributes) experimental feature enabled.
 
 ## Examples
 
@@ -94,42 +87,54 @@ You can find several examples leveraging this module under `examples/`:
 
 There is another example run in the CI suite at [`test/terratest/configure-oidc/main.tf`](test/terratest/configure-oidc/main.tf).
 
-Basic example - one repo, separating secrets access by nonprod and prod pipelines. Note that two different pipelines would typically access different secrets and therefore have different Vault policies.
+Basic example - one repo, separating secrets access by nonprod and prod pipelines.
 
 ```terraform
 module "github-vault-oidc" {
   source = "digitalocean/github-oidc/vault"
-  version = "~> 1.1.0"
+  version = "~> 2.0.0"
 
   oidc_bindings = [
     {
       audience : "https://github.com/artis3n",
-      vault_role_name : "oidc-test",
-      bound_subject : "repo:artis3n/github-oidc-vault-example:environment:nonprod",
+      vault_role_name : "oidc-dev-role",
+      bound_subject : "repo:artis3n/github-oidc-vault-example:pull_request",
       vault_policies : [
-        vault_policy.example.name,
+        vault_policy.dev.name,
       ],
     },
     {
       audience : "https://github.com/artis3n",
-      vault_role_name : "oidc-prod-test",
+      vault_role_name : "oidc-deploy-role",
       bound_subject : "repo:artis3n/github-oidc-vault-example:ref:refs/heads/main",
       vault_policies : [
-        vault_policy.example.name,
+        vault_policy.deployment.name,
       ],
     },
   ]
 }
 
-resource "vault_policy" "example" {
-  name   = "oidc-example"
-  policy = data.vault_policy_document.example.hcl
+resource "vault_policy" "dev" {
+  name   = "oidc-dev"
+  policy = data.vault_policy_document.dev.hcl
 }
 
-data "vault_policy_document" "example" {
+data "vault_policy_document" "dev" {
   rule {
-    path         = "secret/data/foo/bar"
-    capabilities = ["list", "read"]
+    path         = "secret/data/dev/foo"
+    capabilities = ["read"]
+  }
+}
+
+resource "vault_policy" "deployment" {
+  name = "oidc-deploy"
+  policy = data.vault_policy_document.deployment.hcl
+}
+
+data "vault_policy_document" "deployment" {
+  rule {
+    path         = "secret/data/prod/bar"
+    capabilities = ["read"]
   }
 }
 ```
@@ -160,6 +165,7 @@ oidc_bindings = [
     vault_role_name: '',
     bound_subject: '',
     vault_policies: [''],
+    # Optional below
     user_claim: '',
     additional_claims: [
       {
@@ -224,7 +230,7 @@ Instead of changing the `user_claim` for a specific role, consider modifying the
 Each `key` must be a field present in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token).
 
 For example, to leverage [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows)
-with OIDC, you may wish to set your `bound_subject` to `repo:ORG_NAME/*` and add an additional claim of `job_workflow_ref:ORG_NAME/REPO_NAME`.
+with OIDC, you may wish to set your `bound_subject` to `repo:ORG_NAME/*` and add an additional claim of `job_workflow_ref:ORG_NAME/REPO_NAME` pointing to the reusable workflow.
 
 e.g.
 
@@ -256,7 +262,7 @@ This must be a number of seconds.
 
 The default incremental time-to-live for generated tokens, in seconds.
 Since most uses of [`hashicorp/vault-action`](https://github.com/hashicorp/vault-action) authenticate & retrieve secrets
-in one step during a CI pipeline, the default for this variable is set to **60 seconds**.
+in one step during a CI pipeline, the default for this variable is set to **5 minutes**.
 
 If you wish to customize the TTL for all roles, modify this variable.
 You can also specify individual TTL requirements on individual roles that may have edge case needs for a different TTL.
@@ -327,7 +333,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_oidc_bindings"></a> [oidc\_bindings](#input\_oidc\_bindings) | A list of OIDC JWT bindings between GitHub repos and Vault roles. For each entry, you must include:<br><br>  `audience`: By default, this must be the URL of the repository owner (e.g. `https://github.com/digitalocean`). This can be customized with the `jwtGithubAudience` parameter in [hashicorp/vault-action](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token) . This is the bound audience (`aud`) field from [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) .<br><br>  `vault_role_name`: The name of the Vault role to generate under the OIDC auth backend.<br><br>  `bound_subject`: This is what is set in the `sub` field from [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . The bound subject can be constructed from various filters, such as a branch, tag, or specific [environment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) . See [GitHub's documentation](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims) for examples.<br><br>  `vault_policies`: A list of Vault policies you wish to grant to the generated token.<br><br>  `user_claim`: **Optional**. This is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client. This will be used as the name for the Identity entity alias created due to a successful login. This must be a field present in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Defaults to the `default_user_claim` variable if not provided. Consider the impact on [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows#how-the-token-works-with-reusable-workflows) if you are thinking of changing this value from the default.<br><br>  `additional_claims`: **Optional**. Any additional `bound_claims` to configure for this role. Claim keys must match a value in [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Do not use this field for the `sub` claim. Use the `bound_subject` parameter instead.<br><br>  `ttl`: **Optional**. The default incremental time-to-live for the generated token, in seconds. Defaults to the `default_ttl` value but can be individually specified per binding with this value. | <pre>list(object({<br>    audience          = string,<br>    vault_role_name   = string,<br>    bound_subject     = string,<br>    vault_policies    = set(string),<br>    user_claim        = optional(string),<br>    additional_claims = optional(map(string)),<br>    ttl               = optional(number),<br>  }))</pre> | n/a | yes |
-| <a name="input_default_ttl"></a> [default\_ttl](#input\_default\_ttl) | The default incremental time-to-live for generated tokens, in seconds. | `number` | `60` | no |
+| <a name="input_default_ttl"></a> [default\_ttl](#input\_default\_ttl) | The default incremental time-to-live for generated tokens, in seconds. | `number` | `300` | no |
 | <a name="input_default_user_claim"></a> [default\_user\_claim](#input\_default\_user\_claim) | This is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client. This will be used as the name for the Identity entity alias created due to a successful login. This must be a field present in the [GitHub OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Consider the impact on [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows#how-the-token-works-with-reusable-workflows) if you are thinking of changing this value from the default. | `string` | `"job_workflow_ref"` | no |
 | <a name="input_github_identity_provider"></a> [github\_identity\_provider](#input\_github\_identity\_provider) | The JWT authentication URL used for the GitHub OIDC trust configuration. This should not be modified unless you are running GitHub Enterprise Server, in which case you should provide a URL in the format: `https://HOSTNAME/_services/token`. This requires GitHub Enterprise Server version 3.5 or higher. See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>. | `string` | `"https://token.actions.githubusercontent.com"` | no |
 | <a name="input_oidc_auth_backend_path"></a> [oidc\_auth\_backend\_path](#input\_oidc\_auth\_backend\_path) | The path to mount the OIDC auth backend. | `string` | `"github-actions"` | no |

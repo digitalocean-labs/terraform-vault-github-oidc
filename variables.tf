@@ -1,7 +1,7 @@
 variable "default_ttl" {
   type        = number
   description = "The default incremental time-to-live for generated tokens, in seconds."
-  default     = 60 # 1 minute
+  default     = 300 # 5 minutes
 }
 
 variable "default_user_claim" {

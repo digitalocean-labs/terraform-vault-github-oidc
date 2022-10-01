@@ -29,7 +29,7 @@ const (
 	OIDC_BACKEND_CONFIG   = "auth/github-actions/config"
 	OIDC_CI_ROLE_PATH     = "auth/github-actions/role/oidc-ci-test"
 	OIDC_GITHUB_TOKEN_URL = "https://token.actions.githubusercontent.com"
-	TOKEN_TTL             = "60"
+	TOKEN_TTL             = "300"
 )
 
 func (suite *TestSuite) SetupSuite() {
