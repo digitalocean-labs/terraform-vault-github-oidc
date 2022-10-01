@@ -32,7 +32,7 @@ The project has the following folders and files:
 - `/*.tf`: Terraform files that consitute the executable code within the `digitalocean/github-oidc/vault` Terraform module.
 - `/examples`: Relatively plug-and-play examples for using this module.
 - `/test`: Folders with files setting up an ephemeral Vault for running [Terratest](https://terratest.gruntwork.io) to test the module (see [Integration Testing](#integration-testing)).
-  - The `/test/packer` directory builds a weekly Droplet snapshot of a base Vault installation on an Ubuntu server to simplify the regular Terraform invocations during PR reviews.
+  - The `/test/packer` directory builds a weekly Droplet snapshot of a base Vault installation on an Ubuntu server to simplify + speed up the regular Terraform invocations during PR reviews.
   - The `/test/terratest` directory contains the Terratest code executed during pull request reviews.
 - `/main.tf`: The main file of the module, containing all of the resources that will be created.
 - `/variables.tf`: All of the variables for the module.
@@ -104,17 +104,8 @@ If you wish to use `act`, install with `brew install act` and run:
 
 ```bash
 # Check Terraform syntax
-act -j fmt-validate -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest
+act -j fmt-validate -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04
 ```
-
-If you want to waste a bunch of hard drive space, you can run the `pre-commit` job through act with:
-
-```bash
-# This will take up 40+ GB!
-act -j pre-commit -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest
-```
-
-However, running `brew install pre-commit && pre-commit run -a` will be much faster and accomplish the same task.
 
 ## Linting and Formatting
 
