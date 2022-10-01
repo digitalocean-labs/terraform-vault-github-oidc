@@ -27,6 +27,7 @@ fmt:
 	cd examples/simple-repo && terraform fmt
 	cd examples/json-files && terraform fmt
 	cd examples/additional-claims && terraform fmt
+	cd examples/github-enterprise && terraform fmt
 	cd test/terratest && make fmt
 	cd test/packer && make fmt
 
@@ -36,6 +37,7 @@ validate:
 	cd examples/simple-repo && terraform validate
 	cd examples/json-files && terraform validate
 	cd examples/additional-claims && terraform validate
+	cd examples/github-enterprise && terraform validate
 	cd test/terratest && make validate
 	cd test/packer && make validate
 

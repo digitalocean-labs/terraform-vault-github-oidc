@@ -8,7 +8,7 @@ on:
 
 jobs:
   packer-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
     # Workflow only gets the DIGITALOCEAN_TOKEN if it is run from main

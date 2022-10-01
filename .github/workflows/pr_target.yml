@@ -14,7 +14,7 @@ jobs:
   # testing environment or if an error exists in the OIDC module
   # without waiting on both serially.
   test-harness:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: E2E
     permissions:
       contents: read
@@ -47,7 +47,7 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
   oidc-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: E2E
 
     # These permissions must be set in order to successfully bind a GitHub OIDC token.
@@ -157,7 +157,7 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
   lint-packer:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
     environment: E2E
