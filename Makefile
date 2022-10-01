@@ -18,6 +18,10 @@ init:
 .PHONY: init-upgrade
 init-upgrade:
 	terraform init -upgrade
+	cd examples/simple-repo && terraform init -upgrade
+	cd examples/json-files && terraform init -upgrade
+	cd examples/additional-claims && terraform init -upgrade
+	cd examples/github-enterprise && terraform init -upgrade
 	cd test/terratest && make init-upgrade
 	cd test/packer && make init-upgrade
 

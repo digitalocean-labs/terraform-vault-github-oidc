@@ -70,5 +70,6 @@ jobs:
 
       - name: Run Pre-Commit
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           pre-commit --version
           pre-commit run --all-files

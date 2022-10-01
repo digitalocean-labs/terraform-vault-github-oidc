@@ -17,13 +17,13 @@ to an `oidc-binding` via this module.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.6.0 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.8.2 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_github_oidc"></a> [github\_oidc](#module\_github\_oidc) | digitalocean/github-oidc/vault | ~> 1.1.0 |
+| <a name="module_github_oidc"></a> [github\_oidc](#module\_github\_oidc) | digitalocean/github-oidc/vault | ~> 2.0.0 |
 
 ## Resources
 
