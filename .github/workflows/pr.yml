@@ -65,6 +65,7 @@ jobs:
         # Need Bash 5 for terraform fmt in pre-commit hook
         # Nead realpath command for terraform_fmt which we get via coreutils
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install bash coreutils terraform-docs tfsec pre-commit
 
       - name: Run Pre-Commit
