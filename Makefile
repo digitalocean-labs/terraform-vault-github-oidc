@@ -11,6 +11,7 @@ init:
 	cd examples/simple-repo && terraform init
 	cd examples/json-files && terraform init
 	cd examples/additional-claims && terraform init
+	cd examples/github-enterprise && terraform init
 	cd test/terratest && make init
 	cd test/packer && make init
 

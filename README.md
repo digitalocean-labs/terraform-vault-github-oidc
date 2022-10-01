@@ -302,14 +302,14 @@ See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/secu
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 3.4.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.5.0 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.8.2 |
 
 ## Modules
 
