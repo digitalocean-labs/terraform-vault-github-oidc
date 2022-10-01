@@ -72,9 +72,9 @@ This is encapsulated by the `oidc_bindings` variable.
 > **Note**
 >
 > v2 of this module adopts Terraform 1.3's standardized support of [optional object type attributes](https://www.terraform.io/language/expressions/type-constraints#optional-object-type-attributes).
-> Therefore, Terraform 1.3+ is required to use v2.0.0 or higher of this module.
+> Therefore, Terraform 1.3+ is required to use v2.0.0 or higher.
 >
-> Users of Terraform 1.2 or earlier can use v1.1.0 of this module with the [`module_variable_optional_attrs`](https://www.terraform.io/language/v1.2.x/expressions/type-constraints#experimental-optional-object-type-attributes) experimental feature enabled.
+> Users with Terraform 1.2 or earlier can use v1.1.0 of this module with the [`module_variable_optional_attrs`](https://www.terraform.io/language/v1.2.x/expressions/type-constraints#experimental-optional-object-type-attributes) experimental Terraform feature enabled.
 
 ## Examples
 

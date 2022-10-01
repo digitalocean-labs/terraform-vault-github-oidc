@@ -21,6 +21,7 @@ When planning a contribution to this repository, please first discuss the change
 When generating release notes, the repository owners rely on the following conventional specs:
 
 - `feat:` for new features
+- `feat!:` for breaking changes to features
 - `fix:` for bug fixes
 - `improvement:` for enhancements
 - `docs:`: for documentation and examples
