@@ -10,7 +10,7 @@ to an `oidc-binding` via this module.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_vault"></a> [vault](#requirement\_vault) | >= 3.4.1 |
 
 ## Providers

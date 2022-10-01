@@ -168,7 +168,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Install Packer
-        run: brew install packer
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install packer
 
       - name: Initialize Packer
         run: packer init .
