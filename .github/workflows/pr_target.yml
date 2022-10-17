@@ -30,7 +30,7 @@ jobs:
           go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.0
+        uses: hashicorp/setup-terraform@v2.0.2
         with:
           terraform_wrapper: false
 
@@ -68,7 +68,7 @@ jobs:
           go-version-file: test/terratest/go.mod
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.0
+        uses: hashicorp/setup-terraform@v2.0.2
         with:
           terraform_wrapper: false
 
