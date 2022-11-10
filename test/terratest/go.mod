@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/gruntwork-io/terratest v0.40.22
 	github.com/hashicorp/vault/api v1.8.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 )
 
 require (
