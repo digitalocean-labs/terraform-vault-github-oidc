@@ -93,7 +93,7 @@ jobs:
       # secret path "secret/data/foo/bar".
       # We are unable to read "secret/data/main/secret".
       - name: Import Secrets
-        uses: hashicorp/vault-action@v2.4.2
+        uses: hashicorp/vault-action@v2.4.3
         id: secrets
         with:
           exportEnv: false
@@ -114,7 +114,7 @@ jobs:
       # 'secret/data/main/secret' so this will successfully authenticate
       # but fail to pull the 'cdsecret' secret.
       - name: Attempt to read secrets outside bound OIDC policy
-        uses: hashicorp/vault-action@v2.4.2
+        uses: hashicorp/vault-action@v2.4.3
         id: failed-secrets1
         continue-on-error: true
         with:
@@ -136,7 +136,7 @@ jobs:
       # so it cannot be bound to a job running from another branch or a fork.
       # This will fail to authenticate.
       - name: Attempt to access another OIDC role
-        uses: hashicorp/vault-action@v2.4.2
+        uses: hashicorp/vault-action@v2.4.3
         id: failed-secrets2
         continue-on-error: true
         with:
