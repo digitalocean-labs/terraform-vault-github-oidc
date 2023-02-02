@@ -12,7 +12,7 @@ locals {
 
 module "github_oidc" {
   source  = "digitalocean/github-oidc/vault"
-  version = "~> 2.0.0"
+  version = "~> 2.1.0"
 
   oidc_bindings = local.oidc-bindings
 }
