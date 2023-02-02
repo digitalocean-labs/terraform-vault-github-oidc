@@ -1,6 +1,8 @@
 module "github_oidc" {
   source = "../"
 
+  github_identity_provider = "https://token.actions.githubusercontent.com/digitalocean"
+
   oidc_bindings = [
     {
       audience : "https://github.com/digitalocean",
