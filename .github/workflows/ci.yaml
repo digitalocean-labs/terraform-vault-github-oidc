@@ -58,7 +58,7 @@ jobs:
         # Nead realpath command for terraform_fmt which we get via coreutils
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install bash coreutils terraform-docs tfsec pre-commit
+          brew install actionlint bash coreutils terraform-docs tfsec pre-commit
 
       - name: Run Pre-Commit
         run: |
