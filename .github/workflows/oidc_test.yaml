@@ -52,7 +52,7 @@ jobs:
 
       # We've configured Vault, so now let's act as a user and try to read secrets!
       #
-      # See test/configure-oidc/main.tf
+      # See test/main.tf
       #
       # We've configured pull requests to be allowed to read the
       # secret path "secret/data/foo/bar".
