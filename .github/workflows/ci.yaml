@@ -1,8 +1,7 @@
 ---
 name: CI
 
-on:
-  - pull_request
+on: pull_request
 
 jobs:
   fmt-validate:
@@ -18,9 +17,7 @@ jobs:
           - 'examples/json-files/'
           - 'examples/additional-claims/'
           - 'examples/github-enterprise/'
-          - 'test/terratest/prepare-server/'
-          - 'test/terratest/configure-vault/'
-          - 'test/terratest/configure-oidc/'
+          - 'test'
       fail-fast: false
 
     steps:
@@ -53,11 +50,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Go
-        uses: actions/setup-go@v3.5.0
-        with:
-          go-version-file: test/terratest/go.mod
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
 
@@ -66,7 +58,7 @@ jobs:
         # Nead realpath command for terraform_fmt which we get via coreutils
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install bash coreutils terraform-docs tfsec pre-commit
+          brew install actionlint bash coreutils terraform-docs tfsec pre-commit
 
       - name: Run Pre-Commit
         run: |

@@ -16,7 +16,7 @@ Example configuration in this directory binds multiple Vault roles to one GitHub
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.8.2 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.12.0 |
 
 ## Modules
 

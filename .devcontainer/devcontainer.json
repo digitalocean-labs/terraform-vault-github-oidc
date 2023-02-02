@@ -1,39 +1,44 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/ubuntu
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
 	"name": "Ubuntu",
-	"build": {
-		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick an Ubuntu version: jammy / ubuntu-22.04, focal / ubuntu-20.04, bionic /ubuntu-18.04
-		// Use ubuntu-22.04 or ubuntu-18.04 on local arm64/Apple Silicon.
-		"args": { "VARIANT": "ubuntu-22.04" }
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/go:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {
+			"installTFsec": true,
+			"installTerraformDocs": true
+		},
+		"ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {},
+		"ghcr.io/dhoeric/features/terraform-docs:1": {},
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installOhMyZsh": true,
+			"upgradePackages": true
+		},
+		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
+			"plugins": "zsh-syntax-highlighting",
+			"omzPlugins":"https://github.com/zsh-users/zsh-syntax-highlighting.git"
+		}
 	},
-
-	"extensions": [
-		"golang.Go",
-		"HashiCorp.terraform",
-		"yzhang.markdown-all-in-one",
-		"ms-vscode.makefile-tools",
-		"HashiCorp.HCL"
-	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "uname -a",
-	"onCreateCommand": "brew install act bash coreutils packer pre-commit terraform-docs tfsec vault",
-	"updateContentCommand": "brew update && brew upgrade",
-	"postCreateCommand": "pre-commit install --install-hooks; make init",
-	"postStartCommand": "sudo apt update && sudo apt full-upgrade -y",
 
-	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "vscode",
-	"features": {
-		"terraform": "latest",
-		"git": "latest",
-		"github-cli": "latest",
-		"homebrew": "latest",
-		"golang": "latest"
-	}
+	// Need Bash 5 for terraform fmt in pre-commit hook
+	// Nead realpath command for terraform_fmt which we get via coreutils
+	"onCreateCommand": "brew install actionlint bash coreutils pre-commit vault",
+	"postCreateCommand": "pre-commit install --install-hooks; make init"
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
 }
