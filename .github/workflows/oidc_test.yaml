@@ -41,7 +41,7 @@ jobs:
       # and access secrets.
       - name: Setup Vault
         run: |
-          ./github/script/prep_vault.sh
+          .github/script/prep_vault.sh
 
           cd test/
           make init
