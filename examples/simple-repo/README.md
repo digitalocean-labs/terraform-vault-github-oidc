@@ -22,7 +22,7 @@ Example configuration in this directory binds multiple Vault roles to one GitHub
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_github_oidc"></a> [github\_oidc](#module\_github\_oidc) | digitalocean/github-oidc/vault | ~> 2.0.0 |
+| <a name="module_github_oidc"></a> [github\_oidc](#module\_github\_oidc) | digitalocean/github-oidc/vault | ~> 2.1.0 |
 
 ## Resources
 
