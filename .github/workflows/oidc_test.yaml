@@ -34,16 +34,20 @@ jobs:
         with:
           terraform_wrapper: false
 
+      - name: Install Vault
+        run: .github/script/install_vault.sh
+
       # This preconfigures Vault such that we can authenticate to a Vault role
       # and access secrets.
       - name: Setup Vault
         run: |
-          .github/script/install_vault.sh
+          ./github/script/prep_vault.sh
 
           cd test/
           make init
           make apply
         env:
+          VAULT_ADDR: http://127.0.0.1:8200
           VAULT_TOKEN: toomanysecrets
 
       # We've configured Vault, so now let's act as a user and try to read secrets!

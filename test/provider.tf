@@ -12,7 +12,7 @@ terraform {
 provider "vault" {
   # Will access a local dev Vault in the GitHub Actions workflow
   # See the `services:` section in .github/workflows/oidc_test.yml
-  address = "http://127.0.0.1:8200"
 
+  # We set a VAULT_ADDR env var
   # We set a VAULT_TOKEN env var
 }
