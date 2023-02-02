@@ -12,41 +12,8 @@ updates:
       prefix-development: chore
       include: scope
 
-  - package-ecosystem: gomod
-    directory: /test/terratest
-    schedule:
-      interval: monthly
-    reviewers:
-      - artis3n
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
-
   - package-ecosystem: terraform
-    directory: /test/terratest/prepare-server
-    schedule:
-      interval: monthly
-    reviewers:
-      - artis3n
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
-
-  - package-ecosystem: terraform
-    directory: /test/terratest/configure-vault
-    schedule:
-      interval: monthly
-    reviewers:
-      - artis3n
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: scope
-
-  - package-ecosystem: terraform
-    directory: /test/terratest/configure-oidc
+    directory: /test
     schedule:
       interval: monthly
     reviewers:

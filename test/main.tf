@@ -1,12 +1,11 @@
 module "github_oidc" {
-  # source = "digitalocean/github-oidc/vault"
-  source = "../../../"
+  source = "../"
 
   oidc_bindings = [
     {
       audience : "https://github.com/digitalocean",
       vault_role_name : var.vault_roles.ci,
-      bound_subject : "repo:digitalocean/terraform-vault-github-oidc:environment:E2E",
+      bound_subject : "repo:digitalocean/terraform-vault-github-oidc:pull_request",
       vault_policies : [
         vault_policy.example.name,
       ],

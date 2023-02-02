@@ -17,7 +17,7 @@ When using GitHub Enterprise Server, configure this module as normal and update 
 
 | Name | Version |
 |------|---------|
-| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.8.2 |
+| <a name="provider_vault"></a> [vault](#provider\_vault) | 3.12.0 |
 
 ## Modules
 
