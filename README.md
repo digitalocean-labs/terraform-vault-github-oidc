@@ -1,10 +1,11 @@
 # Terraform Module: Hashicorp Vault GitHub OIDC <!-- omit in toc -->
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/digitalocean/terraform-vault-github-oidc?style=flat-square)
-![GitHub](https://img.shields.io/github/license/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/digitalocean/terraform-vault-github-oidc)
+[![OIDC Tests](https://github.com/digitalocean/terraform-vault-github-oidc/actions/workflows/oidc_test.yaml/badge.svg)](https://github.com/digitalocean/terraform-vault-github-oidc/actions/workflows/oidc_test.yaml)
+![GitHub](https://img.shields.io/github/license/digitalocean/terraform-vault-github-oidc)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6305/badge)](https://bestpractices.coreinfrastructure.org/projects/6305)
-![GitHub contributors](https://img.shields.io/github/contributors/digitalocean/terraform-vault-github-oidc?style=flat-square)
-![GitHub last commit](https://img.shields.io/github/last-commit/digitalocean/terraform-vault-github-oidc?style=flat-square)
+![GitHub contributors](https://img.shields.io/github/contributors/digitalocean/terraform-vault-github-oidc)
+![GitHub last commit](https://img.shields.io/github/last-commit/digitalocean/terraform-vault-github-oidc)
 
 Terraform module to configure Vault for GitHub OIDC authentication from Action runners on GitHub.com or self-hosted GitHub Enterprise Server.
 
@@ -12,18 +13,20 @@ OIDC authentication allows us to bind GitHub repositories (and subcomponents of 
 to a Vault role without needing to manage actual credentials that require a lifecycle system, integration into repo-level
 GitHub Secrets, or other organizational glue.
 
+Explore GitHub OIDC and HashiCorp Vault use cases with this hands-on workshop: <https://github.com/artis3n/course-vault-github-oidc>.
+
 Reference documents that help with understanding the process:
 - <https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault>
 
 Once OIDC authentication is configured on a Vault server via this module, a GitHub repository can leverage
 [hashicorp/vault-action](https://github.com/hashicorp/vault-action) to retrieve secrets from Vault with GitHub OIDC authentication.
-No credential management needed!
+No secrets or credential management needed!
 
 e.g.
 
 ```yml
 - name: Import Secrets
-  uses: hashicorp/vault-action@v2.4.1
+  uses: hashicorp/vault-action@v2
   id: secrets
   with:
     exportEnv: false
@@ -40,19 +43,21 @@ e.g.
 
 - [Usage](#usage)
   - [Examples](#examples)
+  - [Considerations for Enterprise Cloud organizations](#considerations-for-enterprise-cloud-organizations)
   - [Variables](#variables)
-    - [oidc_bindings](#oidc_bindings)
-      - [oidc_bindings.audience](#oidc_bindingsaudience)
-      - [oidc_bindings.vault_role_name](#oidc_bindingsvault_role_name)
-      - [oidc_bindings.bound_subject](#oidc_bindingsbound_subject)
-      - [oidc_bindings.vault_policies](#oidc_bindingsvault_policies)
-      - [oidc_bindings.user_claim](#oidc_bindingsuser_claim)
-      - [oidc_bindings.additional_claims](#oidc_bindingsadditional_claims)
-      - [oidc_bindings.ttl](#oidc_bindingsttl)
-    - [default_ttl](#default_ttl)
-    - [default_user_claim](#default_user_claim)
-    - [oidc_auth_backend_path](#oidc_auth_backend_path)
-    - [github_identity_provider](#github_identity_provider)
+    - [oidc\_bindings](#oidc_bindings)
+      - [oidc\_bindings.audience](#oidc_bindingsaudience)
+      - [oidc\_bindings.vault\_role\_name](#oidc_bindingsvault_role_name)
+      - [oidc\_bindings.bound\_subject](#oidc_bindingsbound_subject)
+      - [oidc\_bindings.vault\_policies](#oidc_bindingsvault_policies)
+      - [oidc\_bindings.user\_claim](#oidc_bindingsuser_claim)
+      - [oidc\_bindings.additional\_claims](#oidc_bindingsadditional_claims)
+      - [oidc\_bindings.ttl](#oidc_bindingsttl)
+    - [default\_ttl](#default_ttl)
+    - [default\_user\_claim](#default_user_claim)
+    - [oidc\_auth\_backend\_path](#oidc_auth_backend_path)
+    - [github\_identity\_provider](#github_identity_provider)
+    - [token\_type](#token_type)
   - [Requirements](#requirements)
   - [Providers](#providers)
   - [Modules](#modules)
@@ -85,8 +90,6 @@ You can find several examples leveraging this module under `examples/`:
 - [Leveraging JSON files for distributed organization of repo bindings](/examples/json-files)
 - [Adding custom additional claims per OIDC binding](/examples/additional-claims)
 - [Leveraging this module on-prem with GitHub Enterprise Server](/examples/github-enterprise)
-
-There is another example run in the CI suite at [`test/terratest/configure-oidc/main.tf`](test/terratest/configure-oidc/main.tf).
 
 Basic example - one repo, separating secrets access by nonprod and prod pipelines.
 
@@ -139,6 +142,12 @@ data "vault_policy_document" "deployment" {
   }
 }
 ```
+
+## Considerations for Enterprise Cloud organizations
+
+Enterprise Cloud organizations should strongly consider enabling the [Unique Token URL](https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#switching-to-a-unique-token-url) feature for their organization.
+
+If they do so, they should set the `github_identity_provider` variable of this module to their enterprise's unique token URL.
 
 ## Variables
 
@@ -297,12 +306,26 @@ You cannot pass in a Terraform reference to an existing backend.
 **Optional**
 
 By default, this role will communicate with github.com for an OIDC JWT (`https://token.actions.githubusercontent.com`).
+
+If you are an Enterprise Cloud customer, you should configure a [unique token URL](https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#switching-to-a-unique-token-url) and set this variable to your unique token URL.
+
+`https://token.actions.githubusercontent.com/<enterpriseSlug>`
+
 If you run GitHub Enterprise Server, you will need to configure your instance of GitHub as the identity provider and should modify this variable.
 This requires GitHub Enterprise Server version 3.5 or higher.
 
 The format is: `https://HOSTNAME/_services/token`.
 
 See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>.
+
+### token_type
+
+**Optional**
+
+The type of Vault token that should be generated.
+<https://developer.hashicorp.com/vault/api-docs/auth/jwt#token_type>
+
+Because of the short TTLs and frequent use intended for authentication via this module, this module generates a [batch token](https://developer.hashicorp.com/vault/tutorials/tokens/batch-tokens) by default.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -336,8 +359,9 @@ No modules.
 | <a name="input_oidc_bindings"></a> [oidc\_bindings](#input\_oidc\_bindings) | A list of OIDC JWT bindings between GitHub repos and Vault roles. For each entry, you must include:<br><br>  `audience`: By default, this must be the URL of the repository owner (e.g. `https://github.com/digitalocean`). This can be customized with the `jwtGithubAudience` parameter in [hashicorp/vault-action](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#requesting-the-access-token) . This is the bound audience (`aud`) field from [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) .<br><br>  `vault_role_name`: The name of the Vault role to generate under the OIDC auth backend.<br><br>  `bound_subject`: This is what is set in the `sub` field from [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . The bound subject can be constructed from various filters, such as a branch, tag, or specific [environment](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) . See [GitHub's documentation](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#example-subject-claims) for examples.<br><br>  `vault_policies`: A list of Vault policies you wish to grant to the generated token.<br><br>  `user_claim`: **Optional**. This is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client. This will be used as the name for the Identity entity alias created due to a successful login. This must be a field present in the [GitHub JWT token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Defaults to the `default_user_claim` variable if not provided. Consider the impact on [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows#how-the-token-works-with-reusable-workflows) if you are thinking of changing this value from the default.<br><br>  `additional_claims`: **Optional**. Any additional `bound_claims` to configure for this role. Claim keys must match a value in [GitHub's OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Do not use this field for the `sub` claim. Use the `bound_subject` parameter instead.<br><br>  `ttl`: **Optional**. The default incremental time-to-live for the generated token, in seconds. Defaults to the `default_ttl` value but can be individually specified per binding with this value. | <pre>list(object({<br>    audience          = string,<br>    vault_role_name   = string,<br>    bound_subject     = string,<br>    vault_policies    = set(string),<br>    user_claim        = optional(string),<br>    additional_claims = optional(map(string)),<br>    ttl               = optional(number),<br>  }))</pre> | n/a | yes |
 | <a name="input_default_ttl"></a> [default\_ttl](#input\_default\_ttl) | The default incremental time-to-live for generated tokens, in seconds. | `number` | `300` | no |
 | <a name="input_default_user_claim"></a> [default\_user\_claim](#input\_default\_user\_claim) | This is how you want Vault to [uniquely identify](https://www.vaultproject.io/api/auth/jwt#user_claim) this client. This will be used as the name for the Identity entity alias created due to a successful login. This must be a field present in the [GitHub OIDC token](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token) . Consider the impact on [reusable workflows](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/using-openid-connect-with-reusable-workflows#how-the-token-works-with-reusable-workflows) if you are thinking of changing this value from the default. | `string` | `"job_workflow_ref"` | no |
-| <a name="input_github_identity_provider"></a> [github\_identity\_provider](#input\_github\_identity\_provider) | The JWT authentication URL used for the GitHub OIDC trust configuration. This should not be modified unless you are running GitHub Enterprise Server, in which case you should provide a URL in the format: `https://HOSTNAME/_services/token`. This requires GitHub Enterprise Server version 3.5 or higher. See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>. | `string` | `"https://token.actions.githubusercontent.com"` | no |
+| <a name="input_github_identity_provider"></a> [github\_identity\_provider](#input\_github\_identity\_provider) | The JWT authentication URL used for the GitHub OIDC trust configuration. If you are an Enteprise Cloud account, you should configure a [unique token URL](https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#switching-to-a-unique-token-url) and set the result on this variable. If you are an Enterprise Server organization, you should provide a URL in the format: `https://HOSTNAME/_services/token`. This requires GitHub Enterprise Server version 3.5 or higher. See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>. | `string` | `"https://token.actions.githubusercontent.com"` | no |
 | <a name="input_oidc_auth_backend_path"></a> [oidc\_auth\_backend\_path](#input\_oidc\_auth\_backend\_path) | The path to mount the OIDC auth backend. | `string` | `"github-actions"` | no |
+| <a name="input_token_type"></a> [token\_type](#input\_token\_type) | The type of token to generate. This can be either `batch` or `service`. See <https://developer.hashicorp.com/vault/api-docs/auth/jwt#token_type> for more information. | `string` | `"batch"` | no |
 
 ## Outputs
 

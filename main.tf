@@ -37,4 +37,5 @@ resource "vault_jwt_auth_backend_role" "github_oidc_role" {
 
   token_policies = each.value.vault_policies
   token_ttl      = each.value.ttl != null ? each.value.ttl : var.default_ttl
+  token_type     = var.token_type
 }

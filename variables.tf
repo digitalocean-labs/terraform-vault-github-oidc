@@ -12,7 +12,7 @@ variable "default_user_claim" {
 
 variable "github_identity_provider" {
   type        = string
-  description = "The JWT authentication URL used for the GitHub OIDC trust configuration. This should not be modified unless you are running GitHub Enterprise Server, in which case you should provide a URL in the format: `https://HOSTNAME/_services/token`. This requires GitHub Enterprise Server version 3.5 or higher. See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>."
+  description = "The JWT authentication URL used for the GitHub OIDC trust configuration. If you are an Enteprise Cloud account, you should configure a [unique token URL](https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#switching-to-a-unique-token-url) and set the result on this variable. If you are an Enterprise Server organization, you should provide a URL in the format: `https://HOSTNAME/_services/token`. This requires GitHub Enterprise Server version 3.5 or higher. See <https://docs.github.com/en/enterprise-server@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault#adding-the-identity-provider-to-hashicorp-vault>."
   default     = "https://token.actions.githubusercontent.com"
 }
 
@@ -51,4 +51,10 @@ variable "oidc_bindings" {
       `ttl`: **Optional**. The default incremental time-to-live for the generated token, in seconds. Defaults to the `default_ttl` value but can be individually specified per binding with this value.
 
     EOT
+}
+
+variable "token_type" {
+  type        = string
+  default     = "batch"
+  description = "The type of token to generate. This can be either `batch` or `service`. See <https://developer.hashicorp.com/vault/api-docs/auth/jwt#token_type> for more information."
 }
