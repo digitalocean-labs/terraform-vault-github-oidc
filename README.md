@@ -16,6 +16,7 @@ GitHub Secrets, or other organizational glue.
 Explore GitHub OIDC and HashiCorp Vault use cases with this hands-on workshop: <https://github.com/artis3n/course-vault-github-oidc>.
 
 Reference documents that help with understanding the process:
+- <https://www.digitalocean.com/blog/fine-grained-rbac-for-github-action-workflows-hashicorp-vault>
 - <https://docs.github.com/en/enterprise-cloud@latest/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault>
 
 Once OIDC authentication is configured on a Vault server via this module, a GitHub repository can leverage
