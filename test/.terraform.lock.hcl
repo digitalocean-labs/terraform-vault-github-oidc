@@ -2,21 +2,21 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/hashicorp/vault" {
-  version     = "3.15.0"
+  version     = "3.20.0"
   constraints = ">= 3.4.1"
   hashes = [
-    "h1:VXJ3WhAmjOHstY9ZLKbecM3Xos615fpkQUqaojzsSKU=",
-    "zh:3464a21c259069ebd24a5aaf45e9f3852de38eb2b0e2f888bb15abad2d683835",
-    "zh:63999934c27d2e1c8e9461c3d63183e17fbc7cd4977fc737a1264da86cb8ee0d",
-    "zh:6aa21738497da9e387ec7eedc0b4c1b3e2e0882f3b96b17ff2e91f066db5be27",
+    "h1:tAhOQy6jGSu4WTGWpMgUU+o6r6OSErEnfnjp7KhmHu0=",
+    "zh:233b54a177ee0e1caec685e888686251b4f609378fa3431367ef1edf76aaee69",
+    "zh:640a44674bf7a1f2177734a30fd435576cb8f6b33089e9203fd43747ecb9413b",
+    "zh:6e879dc8a4614a9dea75c106768e0130184d751a89f9ecaa9b2af93e17e838aa",
+    "zh:759f3e4dc20f9bf8d2ed3bfb945564c9f1a7df26922a93bbc6e884a571de65c6",
     "zh:78d5eefdd9e494defcb3c68d282b8f96630502cac21d1ea161f53cfe9bb483b3",
-    "zh:86acc6d68b1a0a37ccbef2912762a79a981c06e5a44f94284aaadaa6c9a2dd05",
-    "zh:903db157400171e0c7bf363f007294dac7d19703a7fa32fbb007d40a300968af",
-    "zh:97d74082a8e1c3e95297038f9bffb87437890799147d1f52a3c60c3a2fe4d338",
-    "zh:b76671fe6fc5e5f9695ed8b144ed97a7bbc3fc9f67cd395aebe6970bb1802f48",
-    "zh:b7ef8a51e3b3e7fe2208956690d0f02262ce46e655a31cd5ef5484cce04d4a11",
-    "zh:c8e65061a57848f84a00bc701d960f42f958c9b46f0063aa19c11af98e94570a",
-    "zh:ec055a10e407c3f5cb1c7a3771ea993380f14ae006a1954d4436b0e1c7dc5c87",
-    "zh:f90e6ed5dfbc8900d70551094cb8796f5b16f9232447929161fee08dcd7a34fb",
+    "zh:7d93c37429da82b7ec26ec7ff92404ec0bb0b9bcc31afaf7e4fcab864aae9997",
+    "zh:ad476e4a8cdc837b6a2ec75e6b44bff233dcb917f0bf9bd45a148beddaee7fe1",
+    "zh:c876876c96234c6f18bebdedac85d5ff71f34d897af0f1747a727bc72e5e73d8",
+    "zh:c9f3e69bddf1db3ad47f9ccd0f3ee25ff06994f476246c77bfcab1f922e5fda7",
+    "zh:ea611784de08a6f02e7f85c05f770de5d44eefde6251e05758129c2689d9c3e1",
+    "zh:f88d817b5c26ce28f347943b69c9110eea830f67c1c2b0c36dc424a7fe7887a7",
+    "zh:faf281cb937125a4152f5afaba52aea7dd4be0bbaf671c30e3d86125080d41e0",
   ]
 }
