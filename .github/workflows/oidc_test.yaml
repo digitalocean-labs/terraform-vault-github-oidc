@@ -27,7 +27,7 @@ jobs:
           --cap-add=IPC_LOCK
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
