@@ -5,17 +5,17 @@ module "github_oidc" {
 
   oidc_bindings = [
     {
-      audience : "https://github.com/digitalocean",
+      audience : "https://github.com/digitalocean-labs",
       vault_role_name : var.vault_roles.ci,
-      bound_subject : "repo:digitalocean/terraform-vault-github-oidc:pull_request",
+      bound_subject : "repo:digitalocean-labs/terraform-vault-github-oidc:pull_request",
       vault_policies : [
         vault_policy.example.name,
       ],
     },
     {
-      audience : "https://github.com/digitalocean",
+      audience : "https://github.com/digitalocean-labs",
       vault_role_name : var.vault_roles.cd,
-      bound_subject : "repo:digitalocean/terraform-vault-github-oidc:ref:refs/heads/main",
+      bound_subject : "repo:digitalocean-labs/terraform-vault-github-oidc:ref:refs/heads/main",
       vault_policies : [
         vault_policy.main.name,
       ],
