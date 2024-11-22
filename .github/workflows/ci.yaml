@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3.0.0
+        uses: hashicorp/setup-terraform@v3.1.1
 
       - name: Terraform Format
         id: fmt
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3.0.0
+        uses: hashicorp/setup-terraform@v3.1.1
 
       - name: Install Brew Packages
         # Need Bash 5 for terraform fmt in pre-commit hook
